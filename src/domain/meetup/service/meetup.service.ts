@@ -31,7 +31,7 @@ export class MeetupService implements IMeetupService {
   }
 
   public async findAll(): Promise<Meetup[]> {
-    return Promise.resolve([]);
+    return await this.meetupRepo.find();
   }
 
   public async findById(id: number): Promise<Meetup> {
