@@ -10,5 +10,5 @@ export interface IMeetupService {
 
   update(updatedMeetup: Meetup): Promise<void>;
 
-  delete(id: string): Promise<void>;
+  delete(id: number): Promise<void>;
 }
