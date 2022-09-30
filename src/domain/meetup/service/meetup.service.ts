@@ -13,25 +13,28 @@ export class MeetupService implements IMeetupService {
   ) {
   }
 
-  async createOne(options: CreateMeetupOptions): Promise<Meetup> {
+  public async createOne(options: CreateMeetupOptions): Promise<Meetup> {
     const meetup = Meetup.create(options);
 
     return await this.meetupRepo.save(meetup);
   }
 
-  async delete(id: string): Promise<void> {
+  public async delete(id: number): Promise<void> {
+    const existingMeetup = await this.findById(id);
+    if (!existingMeetup) throw Error('Meetup doesn\'t exist!');
+
+    await this.meetupRepo.delete({ id });
+  }
+
+  public async update(updatedMeetup: Meetup): Promise<void> {
     return Promise.resolve(undefined);
   }
 
-  async update(updatedMeetup: Meetup): Promise<void> {
-    return Promise.resolve(undefined);
-  }
-
-  async findAll(): Promise<Meetup[]> {
+  public async findAll(): Promise<Meetup[]> {
     return Promise.resolve([]);
   }
 
-  async findById(id: number): Promise<Meetup> {
-    return Promise.resolve(undefined);
+  public async findById(id: number): Promise<Meetup> {
+    return await this.meetupRepo.findOne({ where: { id } });
   }
 }
