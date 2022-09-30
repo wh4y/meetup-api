@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  app_dev:
+    container_name: meetup_api_dev
+    build:
+      context: .
+      target: DEV
+      dockerfile: ./Dockerfile
+    restart: always
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: yarn start:dev
