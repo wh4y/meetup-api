@@ -1,21 +1,39 @@
 import { CreateMeetupOptions } from './options/create-meetup.options';
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity } from 'typeorm';
 
+@Entity('Meetup')
 export class Meetup {
+
+  @PrimaryGeneratedColumn('increment')
   public readonly id: number;
+
+  @Column({
+    type: 'varchar',
+  })
   public readonly title: string;
+
+  @Column({
+    type: 'text',
+  })
   public readonly description: string;
+
+  @Column({
+    type: 'timestamp',
+  })
   public readonly datetime: Date;
+
+  @Column({
+    array: true,
+    type: 'varchar',
+  })
   public readonly tags: string[];
 
-  private constructor(options: CreateMeetupOptions) {
-    this.title = options.title;
-    this.description = options.description;
-    this.datetime = options.datetime;
-    this.tags = options.tags;
-  }
-
   public static create(options: CreateMeetupOptions): Meetup {
-    return new Meetup(options);
+    const meetup = { ...options };
+    Reflect.setPrototypeOf(meetup, Meetup.prototype);
+
+    return meetup as Meetup;
   }
 
   public withTitle(title: string): Meetup {
