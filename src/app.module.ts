@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './infra/database/database.module';
+import { MeetupModule } from './domain/meetup/meetup.module';
 
 @Module({
   imports: [
@@ -8,6 +9,7 @@ import { DatabaseModule } from './infra/database/database.module';
       isGlobal: true,
     }),
     DatabaseModule.registerAsync(),
+    MeetupModule,
   ],
   controllers: [],
   providers: [],
