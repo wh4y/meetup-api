@@ -1,5 +1,6 @@
 import { CreateMeetupOptions } from '../../entity/options/create-meetup.options';
 import { Meetup } from '../../entity/meetup.entity';
+import { UpdateMeetupOptions } from '../options/update-meetup.options';
 
 export interface IMeetupService {
   createOne(options: CreateMeetupOptions): Promise<Meetup>;
@@ -8,7 +9,7 @@ export interface IMeetupService {
 
   findById(id: number): Promise<Meetup>;
 
-  update(updatedMeetup: Meetup): Promise<void>;
+  update(id: number, options: UpdateMeetupOptions): Promise<void>;
 
   delete(id: number): Promise<void>;
 }
