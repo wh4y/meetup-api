@@ -10,6 +10,9 @@ import { MeetupService } from './service/meetup.service';
   providers: [
     MeetupService,
   ],
+  exports: [
+    MeetupService,
+  ],
 })
 export class MeetupModule {
 }
