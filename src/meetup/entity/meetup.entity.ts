@@ -1,9 +1,4 @@
-interface CreateMeetupOptions {
-  title: string;
-  description: string;
-  datetime: Date;
-  tags: string [];
-}
+import { CreateMeetupOptions } from './options/create-meetup.options';
 
 export class Meetup {
   public readonly id: number;
