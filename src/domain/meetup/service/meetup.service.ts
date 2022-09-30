@@ -27,6 +27,9 @@ export class MeetupService implements IMeetupService {
   }
 
   public async update(id: number, options: any): Promise<void> {
+    const existingMeetup = await this.findById(id);
+    if (!existingMeetup) throw Error('Meetup doesn\'t exist!');
+
     await this.meetupRepo.update({ id }, options);
   }
 
