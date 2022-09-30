@@ -26,8 +26,8 @@ export class MeetupService implements IMeetupService {
     await this.meetupRepo.delete({ id });
   }
 
-  public async update(updatedMeetup: Meetup): Promise<void> {
-    return Promise.resolve(undefined);
+  public async update(id: number, options: any): Promise<void> {
+    await this.meetupRepo.update({ id }, options);
   }
 
   public async findAll(): Promise<Meetup[]> {
