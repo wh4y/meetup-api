@@ -1,8 +1,8 @@
-import { FindMeetupOptions } from '../../../../domain/meetup/service/options/find-meetup.options';
 import { Transform } from 'class-transformer';
 import { ArrayNotEmpty, IsArray, IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { GetPageOptions } from '../../service/options/get-page.options';
 
-export class FindMeetupDto implements FindMeetupOptions {
+export class FindMeetupsDto implements GetPageOptions {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsNotEmpty()
