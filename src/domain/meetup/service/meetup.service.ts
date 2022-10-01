@@ -36,7 +36,7 @@ export class MeetupService implements IMeetupService {
   }
 
   public async findMany(options?: FindMeetupOptions, page?: number, count?: number): Promise<Meetup[]> {
-    let findMeetupOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = { ...options };
+    let findMeetupOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = {};
     if (options) findMeetupOptions = {
       ...options,
       tags: options.tags ? ArrayContains(options.tags) : null,
