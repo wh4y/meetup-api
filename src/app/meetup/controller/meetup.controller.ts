@@ -1,16 +1,17 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { IMeetupController } from './interface/meetup-controller.interface';
-import { Response } from 'express';
 import { Meetup } from '../../../domain/meetup/entity/meetup.entity';
 import { MeetupService } from '../../../domain/meetup/service/meetup.service';
 import { RegisterMeetupDto } from './dto/register-meetup.dto';
 import { DatetimeTransformerPipe } from './pipe/datetime-transformer.pipe';
 import { EditMeetupDto } from './dto/edit-meetup.dto';
+import { MeetupManagementService } from '../../../domain/meetup/service/meetup-management.service';
 
 @Controller('/meetup')
 export class MeetupController implements IMeetupController {
   constructor(
     private readonly meetupService: MeetupService,
+    private readonly meetupManagementService: MeetupManagementService,
   ) {
   }
 
@@ -19,15 +20,14 @@ export class MeetupController implements IMeetupController {
     return await this.meetupService.findAll();
   }
 
+  @HttpCode(HttpStatus.CREATED)
   @Post('/register')
   async register(
     @Body(new DatetimeTransformerPipe<RegisterMeetupDto>()) dto: RegisterMeetupDto,
-    @Res() res: Response,
-  ): Promise<void> {
-    await this.meetupService.createOne({ ...dto });
+  ): Promise<Meetup> {
+    const meetup = await this.meetupManagementService.registerMeetup({ ...dto });
 
-    res.statusCode = HttpStatus.CREATED;
-    res.end();
+    return meetup;
   }
 
   @Get('/:id')
@@ -35,23 +35,22 @@ export class MeetupController implements IMeetupController {
     return await this.meetupService.findById(id);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Delete('/cancel/:id')
-  async cancel(@Param('id', new ParseIntPipe()) id: number, @Res() res: Response): Promise<void> {
-    await this.meetupService.delete(id);
+  async cancel(@Param('id', new ParseIntPipe()) id: number): Promise<Meetup> {
+    const meetup = await this.meetupManagementService.cancelMeetup(id);
 
-    res.statusCode = HttpStatus.NO_CONTENT;
-    res.end();
+    return meetup;
   }
 
+  @HttpCode(HttpStatus.OK)
   @Patch('/edit/:id')
   async edit(
     @Param('id', new ParseIntPipe()) id: number,
     @Body(new DatetimeTransformerPipe<EditMeetupDto>()) dto: EditMeetupDto,
-    @Res() res: Response,
-  ): Promise<void> {
-    await this.meetupService.update(id, dto);
+  ): Promise<Meetup> {
+    const meetup = await this.meetupManagementService.editMeetup(id, { ...dto });
 
-    res.statusCode = HttpStatus.NO_CONTENT;
-    res.end();
+    return meetup;
   };
 }
