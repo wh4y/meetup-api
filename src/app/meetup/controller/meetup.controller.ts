@@ -17,9 +17,10 @@ import { IMeetupController } from './interface/meetup-controller.interface';
 import { MeetupService } from '../../../domain/meetup/service/meetup.service';
 import { RegisterMeetupDto } from './dto/register-meetup.dto';
 import { EditMeetupDto } from './dto/edit-meetup.dto';
-import { FindMeetupDto } from './dto/find-meetup.dto';
+import { FindMeetupsDto } from './dto/find-meetups.dto';
 import { MeetupResponse } from './response/meetup.response';
 import { MeetupPageResponse } from './response/meetup-page.response';
+import { MeetupViewService } from '../service/meetup-view.service';
 
 
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -27,22 +28,15 @@ import { MeetupPageResponse } from './response/meetup-page.response';
 export class MeetupController implements IMeetupController {
   constructor(
     private readonly meetupService: MeetupService,
+    private readonly meetupViewService: MeetupViewService,
   ) {
   }
 
   @Get('/')
-  async getMany(@Query() dto: FindMeetupDto): Promise<MeetupPageResponse> {
-    const findManyOptions = { ...dto };
-    Reflect.deleteProperty(findManyOptions, 'page');
-    Reflect.deleteProperty(findManyOptions, 'count');
+  async getMany(@Query() dto: FindMeetupsDto): Promise<MeetupPageResponse> {
+    const page = await this.meetupViewService.getPage({ ...dto });
 
-    const pageNumber = dto.page ? dto.page : 1;
-    const count = dto.count ? dto.count : null;
-
-    const meetups = await this.meetupService.findMany(findManyOptions, pageNumber, count);
-    const totalCount = await this.meetupService.getTotalCount(findManyOptions);
-
-    return { meetups, pageNumber, totalCount };
+    return page;
   }
 
   @HttpCode(HttpStatus.CREATED)
