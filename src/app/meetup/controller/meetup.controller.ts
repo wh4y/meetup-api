@@ -17,7 +17,6 @@ import { IMeetupController } from './interface/meetup-controller.interface';
 import { Meetup } from '../../../domain/meetup/entity/meetup.entity';
 import { MeetupService } from '../../../domain/meetup/service/meetup.service';
 import { RegisterMeetupDto } from './dto/register-meetup.dto';
-import { DatetimeTransformerPipe } from './pipe/datetime-transformer.pipe';
 import { EditMeetupDto } from './dto/edit-meetup.dto';
 import { MeetupManagementService } from '../../../domain/meetup/service/meetup-management.service';
 import { FindMeetupDto } from './dto/find-meetup.dto';
@@ -42,7 +41,7 @@ export class MeetupController implements IMeetupController {
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
   async register(
-    @Body(new DatetimeTransformerPipe<RegisterMeetupDto>()) dto: RegisterMeetupDto,
+    @Body() dto: RegisterMeetupDto,
   ): Promise<Meetup> {
     const meetup = await this.meetupManagementService.registerMeetup({ ...dto });
 
@@ -66,7 +65,7 @@ export class MeetupController implements IMeetupController {
   @Patch('/edit/:id')
   async edit(
     @Param('id', new ParseIntPipe()) id: number,
-    @Body(new DatetimeTransformerPipe<EditMeetupDto>()) dto: EditMeetupDto,
+    @Body() dto: EditMeetupDto,
   ): Promise<Meetup> {
     const meetup = await this.meetupManagementService.editMeetup(id, { ...dto });
 

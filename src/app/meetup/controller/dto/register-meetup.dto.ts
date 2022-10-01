@@ -1,9 +1,11 @@
 import { CreateMeetupOptions } from '../../../../domain/meetup/entity/options/create-meetup.options';
-import { ArrayNotEmpty, IsArray, IsDateString, IsNotEmpty, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class RegisterMeetupDto implements CreateMeetupOptions {
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
+  @Transform(({ value }) => new Date(value))
   public datetime: Date;
 
   @IsString()

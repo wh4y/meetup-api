@@ -1,5 +1,6 @@
 import { UpdateMeetupOptions } from '../../../../domain/meetup/service/options/update-meetup.options';
-import { ArrayNotEmpty, IsArray, IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class EditMeetupDto implements UpdateMeetupOptions {
 
@@ -13,9 +14,10 @@ export class EditMeetupDto implements UpdateMeetupOptions {
   @IsOptional()
   public description?: string;
 
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
   @IsOptional()
+  @Transform(({ value }) => new Date(value))
   public datetime?: Date;
 
   @IsString()
