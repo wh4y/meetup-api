@@ -24,6 +24,11 @@ export class Meetup {
   public readonly datetime: Date;
 
   @Column({
+    type: 'varchar',
+  })
+  public readonly address: string;
+
+  @Column({
     array: true,
     type: 'varchar',
   })
@@ -50,5 +55,9 @@ export class Meetup {
 
   public withTags(tags: string[]): Meetup {
     return Meetup.create({ ...this, tags });
+  }
+
+  public withAddress(address: string): Meetup {
+    return Meetup.create({ ...this, address });
   }
 }
