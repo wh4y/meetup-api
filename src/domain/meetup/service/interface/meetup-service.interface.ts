@@ -13,4 +13,6 @@ export interface IMeetupService {
   editMeetup(id: number, options: UpdateMeetupOptions): Promise<Meetup>;
 
   cancelMeetup(id: number): Promise<Meetup>;
+
+  getTotalCount(options?: FindMeetupOptions): Promise<number>;
 }

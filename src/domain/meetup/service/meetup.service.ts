@@ -62,4 +62,14 @@ export class MeetupService implements IMeetupService {
   public async findById(id: number): Promise<Meetup> {
     return await this.meetupRepo.findOne({ where: { id } });
   }
+
+  public async getTotalCount(options?: FindMeetupOptions): Promise<number> {
+    let findMeetupOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = {};
+    if (options) findMeetupOptions = {
+      ...options,
+      tags: options.tags ? ArrayContains(options.tags) : null,
+    };
+
+    return await this.meetupRepo.count({ where: findMeetupOptions });
+  }
 }
