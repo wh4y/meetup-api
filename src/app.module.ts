@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './infra/database/database.module';
-import { MeetupModule } from './domain/meetup/meetup.module';
 import * as Joi from 'joi';
 import { AppMeetupModule } from './app/meetup/app-meetup.module';
 
