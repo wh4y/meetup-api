@@ -18,7 +18,6 @@ import { Meetup } from '../../../domain/meetup/entity/meetup.entity';
 import { MeetupService } from '../../../domain/meetup/service/meetup.service';
 import { RegisterMeetupDto } from './dto/register-meetup.dto';
 import { EditMeetupDto } from './dto/edit-meetup.dto';
-import { MeetupManagementService } from '../../../domain/meetup/service/meetup-management.service';
 import { FindMeetupDto } from './dto/find-meetup.dto';
 
 
@@ -27,7 +26,6 @@ import { FindMeetupDto } from './dto/find-meetup.dto';
 export class MeetupController implements IMeetupController {
   constructor(
     private readonly meetupService: MeetupService,
-    private readonly meetupManagementService: MeetupManagementService,
   ) {
   }
 
@@ -46,7 +44,7 @@ export class MeetupController implements IMeetupController {
   @Post('/register')
   async register(@Body() dto: RegisterMeetupDto): Promise<Meetup> {
     const findMeetupOptions = { ...dto };
-    const meetup = await this.meetupManagementService.registerMeetup(findMeetupOptions);
+    const meetup = await this.meetupService.registerMeetup(findMeetupOptions);
 
     return meetup;
   }
@@ -59,7 +57,7 @@ export class MeetupController implements IMeetupController {
   @HttpCode(HttpStatus.OK)
   @Delete('/cancel/:id')
   async cancel(@Param('id', new ParseIntPipe()) id: number): Promise<Meetup> {
-    const meetup = await this.meetupManagementService.cancelMeetup(id);
+    const meetup = await this.meetupService.cancelMeetup(id);
 
     return meetup;
   }
@@ -70,7 +68,7 @@ export class MeetupController implements IMeetupController {
     @Param('id', new ParseIntPipe()) id: number,
     @Body() dto: EditMeetupDto,
   ): Promise<Meetup> {
-    const meetup = await this.meetupManagementService.editMeetup(id, { ...dto });
+    const meetup = await this.meetupService.editMeetup(id, { ...dto });
 
     return meetup;
   };

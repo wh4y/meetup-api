@@ -15,24 +15,32 @@ export class MeetupService implements IMeetupService {
   ) {
   }
 
-  public async createOne(options: CreateMeetupOptions): Promise<Meetup> {
-    const meetup = Meetup.create(options);
+  public async registerMeetup(options: CreateMeetupOptions): Promise<Meetup> {
+    const meetup = await this.meetupRepo.findOneBy({
+      ...options,
+      tags: ArrayContains(options.tags),
+    });
+    if (meetup) throw Error('Meetup already exists!');
 
-    return await this.meetupRepo.save(meetup);
+    return await this.meetupRepo.save(Meetup.create(options));
   }
 
-  public async delete(id: number): Promise<void> {
-    const existingMeetup = await this.findById(id);
-    if (!existingMeetup) throw Error('Meetup doesn\'t exist!');
+  public async cancelMeetup(id: number): Promise<Meetup> {
+    const meetup = await this.findById(id);
+    if (!meetup) throw Error('Meetup doesn\'t exist!');
 
     await this.meetupRepo.delete({ id });
+
+    return meetup;
   }
 
-  public async update(id: number, options: any): Promise<void> {
-    const existingMeetup = await this.findById(id);
-    if (!existingMeetup) throw Error('Meetup doesn\'t exist!');
+  public async editMeetup(id: number, options: any): Promise<Meetup> {
+    const meetup = await this.findById(id);
+    if (!meetup) throw Error('Meetup doesn\'t exist!');
 
     await this.meetupRepo.update({ id }, options);
+
+    return await this.findById(id);
   }
 
   public async findMany(options?: FindMeetupOptions, page?: number, count?: number): Promise<Meetup[]> {
