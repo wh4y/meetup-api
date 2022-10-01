@@ -35,14 +35,16 @@ export class MeetupController implements IMeetupController {
   async getMany(
     @Query() dto: FindMeetupDto,
   ): Promise<Meetup[]> {
-    return await this.meetupService.findMany({ ...dto });
+    const findMeetupOptions = { ...dto };
+    Reflect.deleteProperty(findMeetupOptions, 'page');
+    Reflect.deleteProperty(findMeetupOptions, 'count');
+
+    return await this.meetupService.findMany(findMeetupOptions, dto.page, dto.count);
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
-  async register(
-    @Body() dto: RegisterMeetupDto,
-  ): Promise<Meetup> {
+  async register(@Body() dto: RegisterMeetupDto): Promise<Meetup> {
     const findMeetupOptions = { ...dto };
     const meetup = await this.meetupManagementService.registerMeetup(findMeetupOptions);
 

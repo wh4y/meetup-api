@@ -9,4 +9,8 @@ export class FindMeetupDto implements FindMeetupOptions {
   public datetime?: Date;
   public address?: string;
   public tags?: string [];
+  @Transform(({ value }) => Number(value))
+  public page?: number;
+  @Transform(({ value }) => Number(value))
+  public count?: number;
 }

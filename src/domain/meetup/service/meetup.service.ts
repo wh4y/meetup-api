@@ -35,14 +35,20 @@ export class MeetupService implements IMeetupService {
     await this.meetupRepo.update({ id }, options);
   }
 
-  public async findMany(options?: FindMeetupOptions): Promise<Meetup[]> {
+  public async findMany(options?: FindMeetupOptions, page?: number, count?: number): Promise<Meetup[]> {
     let findMeetupOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = { ...options };
     if (options) findMeetupOptions = {
       ...options,
       tags: options.tags ? ArrayContains(options.tags) : null,
     };
 
-    return await this.meetupRepo.findBy(findMeetupOptions);
+    const offset = page && count ? (page - 1) * count : 0;
+
+    return await this.meetupRepo.find({
+      where: findMeetupOptions,
+      take: count,
+      skip: offset,
+    });
   }
 
   public async findById(id: number): Promise<Meetup> {

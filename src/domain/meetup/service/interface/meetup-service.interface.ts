@@ -6,7 +6,7 @@ import { FindMeetupOptions } from '../options/find-meetup.options';
 export interface IMeetupService {
   createOne(options: CreateMeetupOptions): Promise<Meetup>;
 
-  findMany(options?: FindMeetupOptions): Promise<Meetup[]>;
+  findMany(options?: FindMeetupOptions, page?: number, count?: number): Promise<Meetup[]>;
 
   findById(id: number): Promise<Meetup>;
 
