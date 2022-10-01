@@ -4,6 +4,8 @@ import { Meetup } from '../entity/meetup.entity';
 import { Injectable } from '@nestjs/common';
 import { MeetupRepository } from '../../../infra/database/repository/meetup.repository';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FindMeetupOptions } from './options/find-meetup.options';
+import { ArrayContains, FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class MeetupService implements IMeetupService {
@@ -33,8 +35,15 @@ export class MeetupService implements IMeetupService {
     await this.meetupRepo.update({ id }, options);
   }
 
-  public async findAll(): Promise<Meetup[]> {
-    return await this.meetupRepo.find();
+  public async findMany(options?: FindMeetupOptions): Promise<Meetup[]> {
+    console.log(options);
+    let findMeetupOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = { ...options };
+    if (options) findMeetupOptions = {
+      ...options,
+      tags: options.tags ? ArrayContains(options.tags) : null,
+    };
+
+    return await this.meetupRepo.findBy(findMeetupOptions);
   }
 
   public async findById(id: number): Promise<Meetup> {
