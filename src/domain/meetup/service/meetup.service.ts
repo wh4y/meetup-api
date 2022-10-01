@@ -44,8 +44,8 @@ export class MeetupService implements IMeetupService {
   }
 
   public async findMany(options?: FindMeetupOptions, page?: number, count?: number): Promise<Meetup[]> {
-    let findMeetupOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = {};
-    if (options) findMeetupOptions = {
+    let findManyOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = {};
+    if (options) findManyOptions = {
       ...options,
       tags: options.tags ? ArrayContains(options.tags) : null,
     };
@@ -53,7 +53,7 @@ export class MeetupService implements IMeetupService {
     const offset = page && count ? (page - 1) * count : 0;
 
     return await this.meetupRepo.find({
-      where: findMeetupOptions,
+      where: findManyOptions,
       take: count,
       skip: offset,
     });
@@ -64,12 +64,12 @@ export class MeetupService implements IMeetupService {
   }
 
   public async getTotalCount(options?: FindMeetupOptions): Promise<number> {
-    let findMeetupOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = {};
-    if (options) findMeetupOptions = {
+    let findManyOptions: {} | FindOptionsWhere<Meetup> | FindOptionsWhere<Meetup>[] = {};
+    if (options) findManyOptions = {
       ...options,
       tags: options.tags ? ArrayContains(options.tags) : null,
     };
 
-    return await this.meetupRepo.count({ where: findMeetupOptions });
+    return await this.meetupRepo.count({ where: findManyOptions });
   }
 }
