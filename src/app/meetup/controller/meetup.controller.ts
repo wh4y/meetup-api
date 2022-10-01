@@ -9,7 +9,9 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UsePipes, ValidationPipe,
+  Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { IMeetupController } from './interface/meetup-controller.interface';
 import { Meetup } from '../../../domain/meetup/entity/meetup.entity';
@@ -18,8 +20,10 @@ import { RegisterMeetupDto } from './dto/register-meetup.dto';
 import { DatetimeTransformerPipe } from './pipe/datetime-transformer.pipe';
 import { EditMeetupDto } from './dto/edit-meetup.dto';
 import { MeetupManagementService } from '../../../domain/meetup/service/meetup-management.service';
+import { FindMeetupDto } from './dto/find-meetup.dto';
 
-@UsePipes(new ValidationPipe())
+
+@UsePipes(new ValidationPipe({ transform: true }))
 @Controller('/meetup')
 export class MeetupController implements IMeetupController {
   constructor(
@@ -28,9 +32,11 @@ export class MeetupController implements IMeetupController {
   ) {
   }
 
-  @Get('/all')
-  async getAll(): Promise<Meetup[]> {
-    return await this.meetupService.findAll();
+  @Get('/')
+  async getMany(
+    @Query() dto: FindMeetupDto,
+  ): Promise<Meetup[]> {
+    return await this.meetupService.findMany({ ...dto });
   }
 
   @HttpCode(HttpStatus.CREATED)
