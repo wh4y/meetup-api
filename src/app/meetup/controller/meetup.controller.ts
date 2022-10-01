@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UsePipes, ValidationPipe,
+} from '@nestjs/common';
 import { IMeetupController } from './interface/meetup-controller.interface';
 import { Meetup } from '../../../domain/meetup/entity/meetup.entity';
 import { MeetupService } from '../../../domain/meetup/service/meetup.service';
@@ -7,6 +19,7 @@ import { DatetimeTransformerPipe } from './pipe/datetime-transformer.pipe';
 import { EditMeetupDto } from './dto/edit-meetup.dto';
 import { MeetupManagementService } from '../../../domain/meetup/service/meetup-management.service';
 
+@UsePipes(new ValidationPipe())
 @Controller('/meetup')
 export class MeetupController implements IMeetupController {
   constructor(
