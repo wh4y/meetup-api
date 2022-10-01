@@ -8,6 +8,8 @@ services:
       target: DEV
       dockerfile: ./Dockerfile
     restart: always
+    ports:
+      - ${APP_PORT}:${APP_PORT}
     depends_on:
       - db
     volumes:
