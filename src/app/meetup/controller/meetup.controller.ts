@@ -43,7 +43,8 @@ export class MeetupController implements IMeetupController {
   async register(
     @Body() dto: RegisterMeetupDto,
   ): Promise<Meetup> {
-    const meetup = await this.meetupManagementService.registerMeetup({ ...dto });
+    const findMeetupOptions = { ...dto };
+    const meetup = await this.meetupManagementService.registerMeetup(findMeetupOptions);
 
     return meetup;
   }
