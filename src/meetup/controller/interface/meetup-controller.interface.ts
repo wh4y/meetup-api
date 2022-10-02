@@ -1,4 +1,3 @@
-import { Meetup } from '../../entity/meetup.entity';
 import { RegisterMeetupDto } from '../dto/register-meetup.dto';
 import { EditMeetupDto } from '../dto/edit-meetup.dto';
 import { MeetupPageResponse } from '../response/meetup-page.response';
