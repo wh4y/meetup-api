@@ -1,8 +1,7 @@
 import { Transform } from 'class-transformer';
 import { ArrayNotEmpty, IsArray, IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { GetPageOptions } from '../../service/options/get-page.options';
 
-export class FindMeetupsDto implements GetPageOptions {
+export class FindMeetupDto {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsNotEmpty()
@@ -36,16 +35,4 @@ export class FindMeetupsDto implements GetPageOptions {
   @ArrayNotEmpty()
   @IsOptional()
   public tags?: string [];
-
-  @IsNumber()
-  @IsNotEmpty()
-  @IsOptional()
-  @Transform(({ value }) => Number(value))
-  public page?: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  @IsOptional()
-  @Transform(({ value }) => Number(value))
-  public count?: number;
 }
