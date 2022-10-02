@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Meetup } from './entity/meetup.entity';
+import { Meetup } from './entity/meetup/meetup.entity';
 import { MeetupService } from './service/meetup.service';
 import { MeetupController } from './controller/meetup.controller';
-import { MeetupViewService } from './service/meetup-view.service';
+import { MeetupPaginationService } from './service/meetup-pagination.service';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import { MeetupViewService } from './service/meetup-view.service';
   ],
   providers: [
     MeetupService,
-    MeetupViewService,
+    MeetupPaginationService,
   ],
   exports: [
     MeetupService,
