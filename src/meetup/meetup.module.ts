@@ -4,12 +4,14 @@ import { Meetup } from './entity/meetup/meetup.entity';
 import { MeetupService } from './service/meetup.service';
 import { MeetupController } from './controller/meetup.controller';
 import { MeetupPaginationService } from './service/meetup-pagination.service';
+import { MeetupMapper } from './controller/mapper/meetup/meetup.mapper';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Meetup]),
   ],
   providers: [
+    MeetupMapper,
     MeetupService,
     MeetupPaginationService,
   ],

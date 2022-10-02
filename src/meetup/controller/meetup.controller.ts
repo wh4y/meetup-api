@@ -24,6 +24,7 @@ import { MeetupPaginationService } from '../service/meetup-pagination.service';
 import { FindMeetupDtoPipe } from './pipe/find-meetup-dto.pipe';
 import { MeetupPaginationDto } from './dto/meetup-pagination.dto';
 import { PaginationDtoPipe } from './pipe/pagination-dto.pipe';
+import { MeetupMapper } from './mapper/meetup/meetup.mapper';
 
 
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -32,17 +33,22 @@ export class MeetupController implements IMeetupController {
   constructor(
     private readonly meetupService: MeetupService,
     private readonly meetupPaginationService: MeetupPaginationService,
+    private readonly meetupMapper: MeetupMapper,
   ) {
   }
 
   @Get('/')
   async getMany(
     @Query(new FindMeetupDtoPipe()) findDto: FindMeetupDto,
-    @Query(new PaginationDtoPipe()) paginationDto: MeetupPaginationDto,
+    @Query(new PaginationDtoPipe()) { page, count }: MeetupPaginationDto,
   ): Promise<MeetupPageResponse> {
-    const page = await this.meetupPaginationService.getPage(findDto, paginationDto);
+    const meetups = await this.meetupService.findMany(findDto, page, count);
+    const totalCount = await this.meetupService.getTotalCount(findDto);
 
-    return page;
+    const response = await this.meetupMapper.mapMeetupsToPage(meetups, totalCount, page);
+    console.log(response);
+
+    return response;
   }
 
   @HttpCode(HttpStatus.CREATED)
