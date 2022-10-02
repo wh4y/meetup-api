@@ -1,4 +1,4 @@
-import { UpdateMeetupOptions } from '../../../../domain/meetup/service/options/update-meetup.options';
+import { UpdateMeetupOptions } from '../../service/options/update-meetup.options';
 import { ArrayNotEmpty, IsArray, IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 

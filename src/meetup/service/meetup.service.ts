@@ -2,7 +2,7 @@ import { IMeetupService } from './interface/meetup-service.interface';
 import { CreateMeetupOptions } from '../entity/options/create-meetup.options';
 import { Meetup } from '../entity/meetup.entity';
 import { Injectable } from '@nestjs/common';
-import { MeetupRepository } from '../../../infra/database/repository/meetup.repository';
+import { MeetupRepository } from '../repository/meetup.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindMeetupOptions } from './options/find-meetup.options';
 import { ArrayContains, FindOptionsWhere } from 'typeorm';

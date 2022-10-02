@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './infra/database/database.module';
+import { DatabaseModule } from './database/database.module';
 import * as Joi from 'joi';
-import { AppMeetupModule } from './app/meetup/app-meetup.module';
+import { MeetupModule } from './meetup/meetup.module';
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { AppMeetupModule } from './app/meetup/app-meetup.module';
       }),
     }),
     DatabaseModule.registerAsync(),
-    AppMeetupModule,
+    MeetupModule,
   ],
 })
 export class AppModule {

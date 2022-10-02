@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IMeetupViewService } from './interface/meetup-view-service.interface';
 import { MeetupPage } from './interface/meetup-page.interface';
 import { GetPageOptions } from './options/get-page.options';
-import { MeetupService } from '../../../domain/meetup/service/meetup.service';
+import { MeetupService } from './meetup.service';
 
 @Injectable()
 export class MeetupViewService implements IMeetupViewService {

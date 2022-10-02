@@ -14,7 +14,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { IMeetupController } from './interface/meetup-controller.interface';
-import { MeetupService } from '../../../domain/meetup/service/meetup.service';
+import { MeetupService } from '../service/meetup.service';
 import { RegisterMeetupDto } from './dto/register-meetup.dto';
 import { EditMeetupDto } from './dto/edit-meetup.dto';
 import { FindMeetupsDto } from './dto/find-meetups.dto';

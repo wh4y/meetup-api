@@ -12,7 +12,7 @@ const datasource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: true,
-  entities: ["./dist/domain/**/*.entity{.ts,.js}"],
+  entities: ["./dist/**/*.entity{.ts,.js}"],
   migrations: ['./typeorm/migrations/*.js'],
 });
 
