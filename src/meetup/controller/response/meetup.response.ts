@@ -1,6 +1,5 @@
-import { Meetup } from '../../service/interface/meetup.interface';
 
-export class MeetupResponse implements Meetup {
+export class MeetupResponse {
   public id: number;
   public datetime: Date;
   public address: string;

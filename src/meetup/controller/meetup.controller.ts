@@ -20,7 +20,6 @@ import { EditMeetupDto } from './dto/edit-meetup.dto';
 import { FindMeetupDto } from './dto/find-meetup.dto';
 import { MeetupResponse } from './response/meetup.response';
 import { MeetupPageResponse } from './response/meetup-page.response';
-import { MeetupPaginationService } from '../service/meetup-pagination.service';
 import { FindMeetupDtoPipe } from './pipe/find-meetup-dto.pipe';
 import { MeetupPaginationDto } from './dto/meetup-pagination.dto';
 import { PaginationDtoPipe } from './pipe/pagination-dto.pipe';
@@ -32,7 +31,6 @@ import { MeetupMapper } from './mapper/meetup/meetup.mapper';
 export class MeetupController implements IMeetupController {
   constructor(
     private readonly meetupService: MeetupService,
-    private readonly meetupPaginationService: MeetupPaginationService,
     private readonly meetupMapper: MeetupMapper,
   ) {
   }
