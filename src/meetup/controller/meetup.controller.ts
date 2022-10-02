@@ -17,10 +17,13 @@ import { IMeetupController } from './interface/meetup-controller.interface';
 import { MeetupService } from '../service/meetup.service';
 import { RegisterMeetupDto } from './dto/register-meetup.dto';
 import { EditMeetupDto } from './dto/edit-meetup.dto';
-import { FindMeetupsDto } from './dto/find-meetups.dto';
+import { FindMeetupDto } from './dto/find-meetup.dto';
 import { MeetupResponse } from './response/meetup.response';
 import { MeetupPageResponse } from './response/meetup-page.response';
-import { MeetupViewService } from '../service/meetup-view.service';
+import { MeetupPaginationService } from '../service/meetup-pagination.service';
+import { FindMeetupDtoPipe } from './pipe/find-meetup-dto.pipe';
+import { MeetupPaginationDto } from './dto/meetup-pagination.dto';
+import { PaginationDtoPipe } from './pipe/pagination-dto.pipe';
 
 
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -28,13 +31,16 @@ import { MeetupViewService } from '../service/meetup-view.service';
 export class MeetupController implements IMeetupController {
   constructor(
     private readonly meetupService: MeetupService,
-    private readonly meetupViewService: MeetupViewService,
+    private readonly meetupPaginationService: MeetupPaginationService,
   ) {
   }
 
   @Get('/')
-  async getMany(@Query() dto: FindMeetupsDto): Promise<MeetupPageResponse> {
-    const page = await this.meetupViewService.getPage({ ...dto });
+  async getMany(
+    @Query(new FindMeetupDtoPipe()) findDto: FindMeetupDto,
+    @Query(new PaginationDtoPipe()) paginationDto: MeetupPaginationDto,
+  ): Promise<MeetupPageResponse> {
+    const page = await this.meetupPaginationService.getPage(findDto, paginationDto);
 
     return page;
   }
