@@ -1,5 +1,5 @@
-import { CreateMeetupOptions } from '../../entity/options/create-meetup.options';
-import { Meetup } from '../../entity/meetup.entity';
+import { CreateMeetupOptions } from '../../entity/meetup/options/create-meetup.options';
+import { Meetup } from '../../entity/meetup/meetup.entity';
 import { UpdateMeetupOptions } from '../options/update-meetup.options';
 import { FindMeetupOptions } from '../options/find-meetup.options';
 

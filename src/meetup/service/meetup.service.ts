@@ -1,6 +1,6 @@
 import { IMeetupService } from './interface/meetup-service.interface';
-import { CreateMeetupOptions } from '../entity/options/create-meetup.options';
-import { Meetup } from '../entity/meetup.entity';
+import { CreateMeetupOptions } from '../entity/meetup/options/create-meetup.options';
+import { Meetup } from '../entity/meetup/meetup.entity';
 import { Injectable } from '@nestjs/common';
 import { MeetupRepository } from '../repository/meetup.repository';
 import { InjectRepository } from '@nestjs/typeorm';
