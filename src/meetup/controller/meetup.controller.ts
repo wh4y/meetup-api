@@ -45,10 +45,7 @@ export class MeetupController implements IMeetupController {
     const meetups = await this.meetupService.findMany(findDto, page, count);
     const totalCount = await this.meetupService.getTotalCount(findDto);
 
-    const response = await this.meetupMapper.mapMeetupsToPage(meetups, totalCount, page);
-    console.log(response);
-
-    return response;
+    return await this.meetupMapper.mapMeetupsToPage(meetups, totalCount, page);
   }
 
   @HttpCode(HttpStatus.CREATED)
