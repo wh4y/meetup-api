@@ -37,11 +37,11 @@ export class MeetupController implements IMeetupController {
 
   @Get('/')
   async getMany(
-    @Query(new FindMeetupDtoPipe()) findDto: FindMeetupDto,
+    @Query(new FindMeetupDtoPipe()) findMeetupDto: FindMeetupDto,
     @Query(new PaginationDtoPipe()) { page, count }: MeetupPaginationDto,
   ): Promise<MeetupPageResponse> {
-    const meetups = await this.meetupService.findMany(findDto, page, count);
-    const totalCount = await this.meetupService.getTotalCount(findDto);
+    const meetups = await this.meetupService.findMany(findMeetupDto, page, count);
+    const totalCount = await this.meetupService.getTotalCount(findMeetupDto);
 
     return await this.meetupMapper.mapMeetupsToPage(meetups, totalCount, page);
   }
