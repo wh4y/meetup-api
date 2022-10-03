@@ -1,27 +1,52 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { CreateGuestOptions } from './options/create-guest.options';
 
 @Entity()
 export class Guest {
+
   @PrimaryGeneratedColumn('increment')
-  private readonly id: number;
+  public readonly id: number;
 
   @Column({
     type: 'varchar',
   })
-  private readonly email: string;
+  public readonly email: string;
 
   @Column({
     type: 'varchar',
   })
-  private readonly password: string;
+  public readonly password: string;
 
   @Column({
     type: 'varchar',
   })
-  private readonly firstName: string;
+  public readonly firstName: string;
 
   @Column({
     type: 'varchar',
   })
-  private readonly lastName: string;
+  public readonly lastName: string;
+
+  public static create(options: CreateGuestOptions): Guest {
+    const guest = { ...options };
+    Reflect.setPrototypeOf(guest, Guest.prototype);
+
+    return guest as Guest;
+  }
+
+  public withEmail(email: string): Guest {
+    return Guest.create({ ...this, email });
+  }
+
+  public withPassword(password: string): Guest {
+    return Guest.create({ ...this, password });
+  }
+
+  public withFirstName(firstName: string): Guest {
+    return Guest.create({ ...this, firstName });
+  }
+
+  public withLastName(lastName: string): Guest {
+    return Guest.create({ ...this, lastName });
+  }
 }
