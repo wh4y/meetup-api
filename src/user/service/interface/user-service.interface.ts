@@ -12,4 +12,6 @@ export interface IUserService {
   update(id: number, options: UpdateUserOptions): Promise<User>;
 
   delete(id: number): Promise<User>;
+
+  findByEmail(email: string): Promise<User>;
 }

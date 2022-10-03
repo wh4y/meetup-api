@@ -15,7 +15,7 @@ export class UserService implements IUserService {
   }
 
   async create(options: CreateUserOptions): Promise<User> {
-    const existingUser = await this.userRepo.findOneBy({ email: options.email });
+    const existingUser = await this.findByEmail(options.email);
     if (existingUser) throw new Error('User already exists!');
 
     const user = User.create(options);
@@ -35,6 +35,10 @@ export class UserService implements IUserService {
 
   async findById(id: number): Promise<User> {
     return await this.userRepo.findOneBy({ id });
+  }
+
+  async findByEmail(email: string): Promise<User> {
+    return await this.userRepo.findOneBy({ email });
   }
 
   async findMany(options: any): Promise<User[]> {
