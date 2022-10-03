@@ -13,6 +13,7 @@ export class User {
   public readonly email: string;
 
   @Column({
+    unique: true,
     type: 'varchar',
   })
   public readonly password: string;
