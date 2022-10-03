@@ -1,4 +1,4 @@
-export interface CreateGuestOptions {
+export interface CreateUserOptions {
   email: string;
   password: string;
   firstName: string;
