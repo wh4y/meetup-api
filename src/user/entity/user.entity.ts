@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { CreateUserOptions } from './options/create-guest.options';
+import { CreateUserOptions } from './options/create-user.options';
 
 @Entity()
 export class User {
