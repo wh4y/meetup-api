@@ -3,14 +3,13 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Post,
-  Req,
-  UseGuards, UseInterceptors,
+  UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../service/auth.service';
-import { Request } from 'express';
 import { User } from '../module/user/entity/user.entity';
 import { SignUpDto } from './dto/signup.dto';
 import { IAuthController } from './interface/auth-controller.interface';
