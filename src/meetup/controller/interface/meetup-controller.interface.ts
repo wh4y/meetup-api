@@ -1,17 +1,17 @@
 import { RegisterMeetupDto } from '../dto/register-meetup.dto';
 import { EditMeetupDto } from '../dto/edit-meetup.dto';
 import { MeetupPageResponse } from '../response/meetup-page.response';
-import { MeetupResponse } from '../response/meetup.response';
+import { Meetup } from '../../entity/meetup/meetup.entity';
 
 
 export interface IMeetupController {
   getMany(...args: any[]): Promise<MeetupPageResponse>;
 
-  register(dto: RegisterMeetupDto): Promise<MeetupResponse>;
+  register(dto: RegisterMeetupDto): Promise<Meetup>;
 
-  getById(id: number): Promise<MeetupResponse>;
+  getById(id: number): Promise<Meetup>;
 
-  cancel(id: number): Promise<MeetupResponse>;
+  cancel(id: number): Promise<Meetup>;
 
-  edit(id: number, dto: EditMeetupDto): Promise<MeetupResponse>;
+  edit(id: number, dto: EditMeetupDto): Promise<Meetup>;
 }
