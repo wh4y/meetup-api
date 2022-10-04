@@ -1,6 +1,7 @@
 import { IUserController } from './interface/user-controller.interface';
 import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { UserService } from '../service/user.service';
+import { User } from '../entity/user.entity';
 
 @Controller('/user')
 export class UserController implements IUserController {
@@ -8,7 +9,7 @@ export class UserController implements IUserController {
   }
 
   @Get('/:id')
-  async findById(@Param('id', new ParseIntPipe()) id: number): Promise<unknown> {
+  async findById(@Param('id', new ParseIntPipe()) id: number): Promise<User> {
     return await this.userService.findById(id);
   }
 
