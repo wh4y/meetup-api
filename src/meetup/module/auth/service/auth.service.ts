@@ -3,14 +3,37 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../module/user/entity/user.entity';
 import { SignInOptions } from './options/signin.options';
 import { SignUpOptions } from './options/signup.options';
+import { UserService } from '../module/user/service/user.service';
+import bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class AuthService implements IAuthService {
-  signIn(options: SignInOptions): Promise<User> {
-    return Promise.resolve(undefined);
+  constructor(private readonly userService: UserService) {
   }
 
-  signUp(options: SignUpOptions): Promise<User> {
-    return Promise.resolve(undefined);
+  private async validatePassword(passwordToValidate: string, hashedPassword: string): Promise<boolean> {
+    return await bcrypt.compare(passwordToValidate, hashedPassword);
+  }
+
+  public async signIn(options: SignInOptions): Promise<User> {
+    const user = await this.userService.findByEmail(options.email);
+    if (!user) throw new Error('User doesn\'t exist!');
+
+    const isPasswordValid = await this.validatePassword(options.password, user.password);
+    if (!isPasswordValid) throw new Error('Validation failed!');
+
+    return user;
+  }
+
+  public async signUp(options: SignUpOptions): Promise<User> {
+    const existingUser = await this.userService.findByEmail(options.email);
+    if (existingUser) throw Error('User already exists!');
+
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(options.password, salt);
+
+    const user = await this.userService.create({ ...options, password: hashedPassword });
+    return user;
   }
 }
