@@ -5,6 +5,7 @@ import { SignInOptions } from './options/signin.options';
 import { SignUpOptions } from './options/signup.options';
 import { UserService } from '../module/user/service/user.service';
 import * as bcrypt from 'bcrypt';
+import { JwtPayload } from '../controller/interface/jwt-payload.interface';
 
 
 @Injectable()
@@ -35,5 +36,9 @@ export class AuthService implements IAuthService {
 
     const user = await this.userService.create({ ...options, password: hashedPassword });
     return user;
+  }
+
+  async verifyJWTPayload(payload: JwtPayload): Promise<User | null> {
+    return await this.userService.findByEmail(payload.email);
   }
 }
