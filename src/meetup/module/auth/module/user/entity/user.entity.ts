@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateUserOptions } from './options/create-user.options';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -16,6 +17,7 @@ export class User {
     unique: true,
     type: 'varchar',
   })
+  @Exclude()
   public readonly password: string;
 
   @Column({
