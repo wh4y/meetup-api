@@ -14,7 +14,7 @@ export class UserService implements IUserService {
   ) {
   }
 
-  async create(options: CreateUserOptions): Promise<User> {
+  public async create(options: CreateUserOptions): Promise<User> {
     const existingUser = await this.findByEmail(options.email);
     if (existingUser) throw new Error('User already exists!');
 
@@ -24,7 +24,7 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async delete(id: number): Promise<User> {
+  public async delete(id: number): Promise<User> {
     const user = await this.findById(id);
     if (!user) throw Error('User doesn\'t exist!');
 
@@ -33,19 +33,19 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async findById(id: number): Promise<User> {
+  public async findById(id: number): Promise<User> {
     return await this.userRepo.findOneBy({ id });
   }
 
-  async findByEmail(email: string): Promise<User> {
+  public async findByEmail(email: string): Promise<User> {
     return await this.userRepo.findOneBy({ email });
   }
 
-  async findMany(options: any): Promise<User[]> {
+  public async findMany(options: any): Promise<User[]> {
     throw new NotImplementedException();
   }
 
-  async update(id: number, options: UpdateUserOptions): Promise<User> {
+  public async update(id: number, options: UpdateUserOptions): Promise<User> {
     const user = await this.findById(id);
     if (!user) throw Error('User doesn\'t exist!');
 
