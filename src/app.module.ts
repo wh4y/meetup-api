@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database/database.module';
 import * as Joi from 'joi';
 import { MeetupModule } from './meetup/meetup.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { MeetupModule } from './meetup/meetup.module';
         DB_NAME: Joi.string().required(),
       }),
     }),
-    DatabaseModule.registerAsync(),
+    SharedModule,
     MeetupModule,
   ],
 })
