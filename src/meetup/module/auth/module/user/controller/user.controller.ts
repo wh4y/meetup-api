@@ -9,12 +9,12 @@ export class UserController implements IUserController {
   }
 
   @Get('/:id')
-  async findById(@Param('id', new ParseIntPipe()) id: number): Promise<User> {
+  async getById(@Param('id', new ParseIntPipe()) id: number): Promise<User> {
     return await this.userService.findById(id);
   }
 
   @Get('/')
-  async findMany(dto?: unknown): Promise<unknown> {
+  async getMany(dto?: unknown): Promise<unknown> {
     return await this.userService.findMany(dto);
   }
 }
