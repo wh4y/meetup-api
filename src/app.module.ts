@@ -16,6 +16,8 @@ import { SharedModule } from './shared/shared.module';
         DB_USER: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
+        JWT_ACCESS_SECRET: Joi.string().required(),
+        JWT_ACCESS_EXPIRES_IN: Joi.string().required(),
       }),
     }),
     SharedModule,
