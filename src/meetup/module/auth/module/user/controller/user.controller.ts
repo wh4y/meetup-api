@@ -8,7 +8,7 @@ export class UserController implements IUserController {
   }
 
   @Get('/:id')
-  async findById(@Param(new ParseIntPipe()) id: number): Promise<unknown> {
+  async findById(@Param('id', new ParseIntPipe()) id: number): Promise<unknown> {
     return await this.userService.findById(id);
   }
 
