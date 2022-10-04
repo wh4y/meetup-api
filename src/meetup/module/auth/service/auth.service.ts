@@ -4,7 +4,7 @@ import { User } from '../module/user/entity/user.entity';
 import { SignInOptions } from './options/signin.options';
 import { SignUpOptions } from './options/signup.options';
 import { UserService } from '../module/user/service/user.service';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 
 @Injectable()
@@ -18,10 +18,10 @@ export class AuthService implements IAuthService {
 
   public async signIn(options: SignInOptions): Promise<User> {
     const user = await this.userService.findByEmail(options.email);
-    if (!user) throw new Error('User doesn\'t exist!');
+    if (!user) return null;
 
     const isPasswordValid = await this.validatePassword(options.password, user.password);
-    if (!isPasswordValid) throw new Error('Validation failed!');
+    if (!isPasswordValid) return null;
 
     return user;
   }
