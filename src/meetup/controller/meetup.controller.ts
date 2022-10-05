@@ -10,7 +10,7 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
+  UseGuards, UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -27,8 +27,11 @@ import { MeetupMapper } from './mapper/meetup/meetup.mapper';
 import { Meetup } from '../entity/meetup/meetup.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractedUserId } from './decorator/extracted-user-id.decorator';
+import { ExcludePasswordInterceptor } from '../../shared/module/auth/interceptor/exclude-password.interceptor';
+import { User } from '../module/auth/module/user/entity/user.entity';
 
 
+@UseInterceptors(new ExcludePasswordInterceptor<User>())
 @UsePipes(new ValidationPipe({ transform: true }))
 @Controller('/meetup')
 export class MeetupController implements IMeetupController {
