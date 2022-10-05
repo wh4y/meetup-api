@@ -17,4 +17,6 @@ export interface IMeetupService {
   getTotalCount(options?: FindMeetupOptions): Promise<number>;
 
   registerGuestForMeetup(meetupId: number, userId: number): Promise<void>;
+
+  unregisterGuestForMeetup(meetupId: number, userId: number): Promise<void>;
 }
