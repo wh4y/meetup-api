@@ -14,6 +14,7 @@ import { User } from '../module/user/entity/user.entity';
 import { SignUpDto } from './dto/signup.dto';
 import { IAuthController } from './interface/auth-controller.interface';
 import { AuthedUser } from './decorator/authed-user.decorator';
+import { JwtInterceptor } from './interceptor/jwt.interceptor';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -23,11 +24,13 @@ export class AuthController implements IAuthController {
   }
 
   @Post('/signin')
+  @UseInterceptors(JwtInterceptor)
   @UseGuards(AuthGuard('local'))
   async signIn(@AuthedUser() user: User): Promise<User> {
     return user;
   }
 
+  @UseInterceptors(JwtInterceptor)
   @Post('/signup')
   async signUp(@Body() dto: SignUpDto): Promise<User> {
     return await this.authService.signUp(dto);
