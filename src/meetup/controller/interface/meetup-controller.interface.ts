@@ -14,4 +14,6 @@ export interface IMeetupController {
   cancel(id: number): Promise<Meetup>;
 
   edit(id: number, dto: EditMeetupDto): Promise<Meetup>;
+
+  registerGuestForMeetup(meetupId: number, userId: number): Promise<void>;
 }
