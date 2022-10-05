@@ -6,12 +6,14 @@ import { MeetupRepository } from '../repository/meetup.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindMeetupOptions } from './options/find-meetup.options';
 import { ArrayContains, FindOptionsWhere } from 'typeorm';
+import { UserService } from '../module/auth/module/user/service/user.service';
 
 @Injectable()
 export class MeetupService implements IMeetupService {
   constructor(
     @InjectRepository(Meetup)
     private readonly meetupRepo: MeetupRepository,
+    private readonly userService: UserService,
   ) {
   }
 
@@ -73,5 +75,20 @@ export class MeetupService implements IMeetupService {
     };
 
     return await this.meetupRepo.count({ where: findManyOptions });
+  }
+
+  public async registerGuestForMeetup(meetupId: number, userId: number): Promise<void> {
+    let meetup = await this.findById(meetupId);
+    if (!meetup) throw new Error('Meetup doesn\'t exist!');
+
+    const guest = await this.userService.findById(userId);
+    if (!guest) throw new Error('User doesn\'t exist!');
+
+    const isUserAlreadyRegistered = meetup.guests
+      .some((registeredGuest) => registeredGuest.id === guest.id);
+    if(isUserAlreadyRegistered) throw new Error('Guest has already registered for this meetup!')
+
+    meetup = meetup.withGuests([...meetup.guests, guest]);
+    await this.meetupRepo.save(meetup);
   }
 }

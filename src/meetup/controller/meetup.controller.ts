@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -24,6 +25,8 @@ import { MeetupPaginationDto } from './dto/meetup-pagination.dto';
 import { PaginationDtoPipe } from './pipe/pagination-dto.pipe';
 import { MeetupMapper } from './mapper/meetup/meetup.mapper';
 import { Meetup } from '../entity/meetup/meetup.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { ExtractedUserId } from './decorator/extracted-user-id.decorator';
 
 
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -77,4 +80,14 @@ export class MeetupController implements IMeetupController {
 
     return meetup;
   };
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/register-guest-for-meetup/:meetupId')
+  @UseGuards(AuthGuard('jwt'))
+  async registerGuestForMeetup(
+    @Param('meetupId', new ParseIntPipe()) meetupId: number,
+    @ExtractedUserId() userId: number,
+  ): Promise<void> {
+    await this.meetupService.registerGuestForMeetup(meetupId, userId);
+  }
 }
