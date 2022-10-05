@@ -17,8 +17,7 @@ export class MeetupService implements IMeetupService {
 
   public async registerMeetup(options: CreateMeetupOptions): Promise<Meetup> {
     const meetup = await this.meetupRepo.findOneBy({
-      ...options,
-      tags: ArrayContains(options.tags),
+      title: options.title,
     });
     if (meetup) throw Error('Meetup already exists!');
 
@@ -56,11 +55,14 @@ export class MeetupService implements IMeetupService {
       where: findManyOptions,
       take: count,
       skip: offset,
+      relations: {
+        guests: true,
+      },
     });
   }
 
   public async findById(id: number): Promise<Meetup> {
-    return await this.meetupRepo.findOne({ where: { id } });
+    return await this.meetupRepo.findOne({ where: { id }, relations: { guests: true } });
   }
 
   public async getTotalCount(options?: FindMeetupOptions): Promise<number> {
