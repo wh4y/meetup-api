@@ -1,8 +1,9 @@
 import { IUserController } from './interface/user-controller.interface';
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Param, ParseIntPipe, UseInterceptors } from '@nestjs/common';
 import { UserService } from '../service/user.service';
 import { User } from '../entity/user.entity';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('/user')
 export class UserController implements IUserController {
   constructor(private readonly userService: UserService) {
