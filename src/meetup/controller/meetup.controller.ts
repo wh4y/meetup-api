@@ -90,4 +90,14 @@ export class MeetupController implements IMeetupController {
   ): Promise<void> {
     await this.meetupService.registerGuestForMeetup(meetupId, userId);
   }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('/unregister-guest-for-meetup/:meetupId')
+  @UseGuards(AuthGuard('jwt'))
+  async unregisterGuestForMeetup(
+    @Param('meetupId', new ParseIntPipe()) meetupId: number,
+    @ExtractedUserId() userId: number,
+  ): Promise<void> {
+    await this.meetupService.unregisterGuestForMeetup(meetupId, userId);
+  }
 }
