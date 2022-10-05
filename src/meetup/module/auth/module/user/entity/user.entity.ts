@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CreateUserOptions } from './options/create-user.options';
 import { Exclude } from 'class-transformer';
+import { Meetup } from '../../../../../entity/meetup/meetup.entity';
 
 @Entity()
 export class User {
@@ -29,6 +30,9 @@ export class User {
     type: 'varchar',
   })
   public readonly lastName: string;
+
+  @ManyToMany(() => Meetup, (meetup) => meetup.guests)
+  public readonly signedMeetups: Meetup[];
 
   public static create(options: CreateUserOptions): User {
     const guest = { ...options };

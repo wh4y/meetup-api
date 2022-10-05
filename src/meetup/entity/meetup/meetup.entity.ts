@@ -1,6 +1,6 @@
 import { CreateMeetupOptions } from './options/create-meetup.options';
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Entity } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../../module/auth/module/user/entity/user.entity';
 
 @Entity('Meetup')
 export class Meetup {
@@ -33,6 +33,10 @@ export class Meetup {
     type: 'varchar',
   })
   public readonly tags: string[];
+
+  @ManyToMany(() => User, (guest) => guest.signedMeetups)
+  @JoinTable()
+  public readonly guests: User[];
 
   public static create(options: CreateMeetupOptions): Meetup {
     const meetup = { ...options };
