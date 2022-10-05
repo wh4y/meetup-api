@@ -6,11 +6,17 @@ import { SignUpOptions } from './options/signup.options';
 import { UserService } from '../module/user/service/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from '../controller/interface/jwt-payload.interface';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
 export class AuthService implements IAuthService {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly configService: ConfigService,
+    private readonly jWTService: JwtService,
+  ) {
   }
 
   private async validatePassword(passwordToValidate: string, hashedPassword: string): Promise<boolean> {
@@ -36,6 +42,13 @@ export class AuthService implements IAuthService {
 
     const user = await this.userService.create({ ...options, password: hashedPassword });
     return user;
+  }
+
+  generateAccessToken(payload: JwtPayload): string {
+    const expiresIn = this.configService.get<string>('JWT_ACCESS_EXPIRES_IN');
+    const token = this.jWTService.sign(payload, { expiresIn });
+
+    return token;
   }
 
   async verifyJWTPayload(payload: JwtPayload): Promise<User | null> {
