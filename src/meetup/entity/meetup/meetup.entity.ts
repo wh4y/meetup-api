@@ -39,7 +39,8 @@ export class Meetup {
   public readonly guests: User[];
 
   public static create(options: CreateMeetupOptions): Meetup {
-    const meetup = { ...options };
+    const guests = options.guests || [];
+    const meetup = { ...options, guests };
     Reflect.setPrototypeOf(meetup, Meetup.prototype);
 
     return meetup as Meetup;
@@ -63,5 +64,9 @@ export class Meetup {
 
   public withAddress(address: string): Meetup {
     return Meetup.create({ ...this, address });
+  }
+
+  public withGuests(guests: User[]): Meetup {
+    return Meetup.create({ ...this, guests });
   }
 }
