@@ -8,6 +8,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayload } from '../controller/interface/jwt-payload.interface';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { UserAlreadyExistsException } from '../module/user/service/exception/user-already-exists.exception';
 
 
 @Injectable()
@@ -35,7 +36,7 @@ export class AuthService implements IAuthService {
 
   public async signUp(options: SignUpOptions): Promise<User> {
     const existingUser = await this.userService.findByEmail(options.email);
-    if (existingUser) throw Error('User already exists!');
+    if (existingUser) throw new UserAlreadyExistsException();
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(options.password, salt);
