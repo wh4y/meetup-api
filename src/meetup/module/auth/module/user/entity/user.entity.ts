@@ -35,10 +35,10 @@ export class User {
   public readonly signedMeetups: Meetup[];
 
   public static create(options: CreateUserOptions): User {
-    const guest = { ...options };
-    Reflect.setPrototypeOf(guest, User.prototype);
+    const user = { ...options, signedMeetups: [] };
+    Reflect.setPrototypeOf(user, User.prototype);
 
-    return guest as User;
+    return user as User;
   }
 
   public withEmail(email: string): User {
