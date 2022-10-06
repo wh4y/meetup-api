@@ -1,7 +1,7 @@
 import {
   Body,
   ClassSerializerInterceptor,
-  Controller,
+  Controller, HttpCode, HttpStatus,
   Post,
   UseGuards,
   UseInterceptors,
@@ -16,7 +16,11 @@ import { IAuthController } from './interface/auth-controller.interface';
 import { AuthedUser } from './decorator/authed-user.decorator';
 import { JwtInterceptor } from './interceptor/jwt.interceptor';
 import { UserAlreadyExistsInterceptor } from '../module/user/controller/interceptor/user-already-exists.interceptor';
+import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { SignInDto } from './dto/signin.dto';
 
+
+@ApiTags('Auth')
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
 @Controller('/auth')
@@ -24,6 +28,12 @@ export class AuthController implements IAuthController {
   constructor(private readonly authService: AuthService) {
   }
 
+  @ApiBody({ type: SignInDto })
+  @ApiOkResponse({
+    description: 'Successfully signed in!',
+    type: User,
+  })
+  @HttpCode(HttpStatus.OK)
   @Post('/signin')
   @UseInterceptors(JwtInterceptor)
   @UseGuards(AuthGuard('local'))
@@ -31,6 +41,12 @@ export class AuthController implements IAuthController {
     return user;
   }
 
+  @ApiBody({ type: SignUpDto })
+  @ApiCreatedResponse({
+    description: 'Successfully signed up!',
+    type: User,
+  })
+  @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(
     UserAlreadyExistsInterceptor,
     JwtInterceptor,

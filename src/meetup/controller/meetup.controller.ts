@@ -34,8 +34,19 @@ import { MeetupAlreadyExistsInterceptor } from './interceptor/meetup-already-exi
 import { GuestAlreadyRegisteredInterceptor } from './interceptor/guest-already-registered.interceptor';
 import { GuestNotRegisteredInterceptor } from './interceptor/guest-not-registered.interceptor';
 import { UserNotExistInterceptor } from '../module/auth/module/user/controller/interceptor/user-not-exist.interceptor';
+import {
+  ApiBody,
+  ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
 
+@ApiTags('Meetup')
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
 @Controller('/meetup')
@@ -46,6 +57,16 @@ export class MeetupController implements IMeetupController {
   ) {
   }
 
+  @ApiOkResponse({
+    description: 'Data has been successfully extracted!',
+    type: MeetupPageResponse,
+  })
+  @ApiQuery({ name: 'id', required: false })
+  @ApiQuery({ name: 'title', required: false })
+  @ApiQuery({ name: 'description', required: false })
+  @ApiQuery({ name: 'datetime', required: false, example: '2022-10-06T18:25:13.732Z' })
+  @ApiQuery({ name: 'address', required: false })
+  @ApiQuery({ name: 'tags', isArray: true, required: false, example: 'tags[]=none&tags[]=ban' })
   @Get('/')
   async getMany(
     @Query(new FindMeetupDtoPipe()) findMeetupDto: FindMeetupDto,
@@ -57,6 +78,12 @@ export class MeetupController implements IMeetupController {
     return await this.meetupMapper.mapMeetupsToPage(meetups, totalCount, page);
   }
 
+  @ApiCreatedResponse({
+    description: 'Meetup has been successfully registered!',
+    type: Meetup,
+  })
+  @ApiBody({ type: RegisterMeetupDto })
+  @ApiCreatedResponse({ description: '' })
   @UseInterceptors(MeetupAlreadyExistsInterceptor)
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
@@ -66,11 +93,21 @@ export class MeetupController implements IMeetupController {
     return meetup;
   }
 
+  @ApiParam({ name: 'id' })
+  @ApiOkResponse({
+    description: 'Meetup has been successfully found!',
+    type: Meetup,
+  })
   @Get('/:id')
   async getById(@Param('id', new ParseIntPipe()) id: number): Promise<Meetup> {
     return await this.meetupService.findById(id);
   }
 
+  @ApiParam({ name: 'id' })
+  @ApiOkResponse({
+    description: 'Meetup has been successfully canceled!',
+    type: Meetup,
+  })
   @UseInterceptors(MeetupNotExistInterceptor)
   @HttpCode(HttpStatus.OK)
   @Delete('/cancel/:id')
@@ -80,6 +117,12 @@ export class MeetupController implements IMeetupController {
     return meetup;
   }
 
+  @ApiParam({ name: 'id' })
+  @ApiBody({ type: EditMeetupDto })
+  @ApiOkResponse({
+    description: 'Meetup has been updated!',
+    type: Meetup,
+  })
   @UseInterceptors(MeetupNotExistInterceptor)
   @HttpCode(HttpStatus.OK)
   @Patch('/edit/:id')
@@ -92,13 +135,17 @@ export class MeetupController implements IMeetupController {
     return meetup;
   };
 
-
+  @ApiParam({ name: 'meetupId' })
+  @ApiCookieAuth('accessToken')
+  @ApiNoContentResponse({
+    description: 'User has been successfully registered for a meetup!',
+  })
   @UseInterceptors(
     MeetupNotExistInterceptor,
     GuestAlreadyRegisteredInterceptor,
     UserNotExistInterceptor,
   )
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Post('/register-guest-for-meetup/:meetupId')
   @UseGuards(AuthGuard('jwt'))
   async registerGuestForMeetup(
@@ -108,6 +155,11 @@ export class MeetupController implements IMeetupController {
     await this.meetupService.registerGuestForMeetup(meetupId, userId);
   }
 
+  @ApiParam({ name: 'meetupId' })
+  @ApiCookieAuth('accessToken')
+  @ApiNoContentResponse({
+    description: 'User has been successfully unregistered for a meetup!',
+  })
   @UseInterceptors(
     MeetupNotExistInterceptor,
     GuestNotRegisteredInterceptor,
