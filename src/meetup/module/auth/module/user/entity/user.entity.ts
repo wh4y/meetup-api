@@ -42,7 +42,7 @@ export class User {
   public readonly signedMeetups: Meetup[];
 
   public static create(options: CreateUserOptions): User {
-    const user = { ...options, signedMeetups: [] };
+    const user = { ...options, signedMeetups: options.signedMeetups || [] };
     Reflect.setPrototypeOf(user, User.prototype);
 
     return user as User;
