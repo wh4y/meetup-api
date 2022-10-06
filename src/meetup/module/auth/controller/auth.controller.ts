@@ -15,6 +15,7 @@ import { SignUpDto } from './dto/signup.dto';
 import { IAuthController } from './interface/auth-controller.interface';
 import { AuthedUser } from './decorator/authed-user.decorator';
 import { JwtInterceptor } from './interceptor/jwt.interceptor';
+import { UserAlreadyExistsInterceptor } from '../module/user/controller/interceptor/user-already-exists.interceptor';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -30,7 +31,10 @@ export class AuthController implements IAuthController {
     return user;
   }
 
-  @UseInterceptors(JwtInterceptor)
+  @UseInterceptors(
+    UserAlreadyExistsInterceptor,
+    JwtInterceptor,
+  )
   @Post('/signup')
   async signUp(@Body() dto: SignUpDto): Promise<User> {
     return await this.authService.signUp(dto);

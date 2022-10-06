@@ -29,6 +29,11 @@ import { MeetupMapper } from './mapper/meetup/meetup.mapper';
 import { Meetup } from '../entity/meetup/meetup.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { ExtractedUserId } from './decorator/extracted-user-id.decorator';
+import { MeetupNotExistInterceptor } from './interceptor/meetup-not-exist.interceptor';
+import { MeetupAlreadyExistsInterceptor } from './interceptor/meetup-already-exists.interceptor';
+import { GuestAlreadyRegisteredInterceptor } from './interceptor/guest-already-registered.interceptor';
+import { GuestNotRegisteredInterceptor } from './interceptor/guest-not-registered.interceptor';
+import { UserNotExistInterceptor } from '../module/auth/module/user/controller/interceptor/user-not-exist.interceptor';
 
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -52,6 +57,7 @@ export class MeetupController implements IMeetupController {
     return await this.meetupMapper.mapMeetupsToPage(meetups, totalCount, page);
   }
 
+  @UseInterceptors(MeetupAlreadyExistsInterceptor)
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
   async register(@Body() dto: RegisterMeetupDto): Promise<Meetup> {
@@ -65,6 +71,7 @@ export class MeetupController implements IMeetupController {
     return await this.meetupService.findById(id);
   }
 
+  @UseInterceptors(MeetupNotExistInterceptor)
   @HttpCode(HttpStatus.OK)
   @Delete('/cancel/:id')
   async cancel(@Param('id', new ParseIntPipe()) id: number): Promise<Meetup> {
@@ -73,6 +80,7 @@ export class MeetupController implements IMeetupController {
     return meetup;
   }
 
+  @UseInterceptors(MeetupNotExistInterceptor)
   @HttpCode(HttpStatus.OK)
   @Patch('/edit/:id')
   async edit(
@@ -84,6 +92,12 @@ export class MeetupController implements IMeetupController {
     return meetup;
   };
 
+
+  @UseInterceptors(
+    MeetupNotExistInterceptor,
+    GuestAlreadyRegisteredInterceptor,
+    UserNotExistInterceptor,
+  )
   @HttpCode(HttpStatus.OK)
   @Post('/register-guest-for-meetup/:meetupId')
   @UseGuards(AuthGuard('jwt'))
@@ -94,6 +108,11 @@ export class MeetupController implements IMeetupController {
     await this.meetupService.registerGuestForMeetup(meetupId, userId);
   }
 
+  @UseInterceptors(
+    MeetupNotExistInterceptor,
+    GuestNotRegisteredInterceptor,
+    UserNotExistInterceptor,
+  )
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/unregister-guest-for-meetup/:meetupId')
   @UseGuards(AuthGuard('jwt'))
