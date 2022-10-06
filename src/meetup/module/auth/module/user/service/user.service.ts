@@ -5,6 +5,8 @@ import { User } from '../entity/user.entity';
 import { UpdateUserOptions } from './options/update-user.options';
 import { UserRepository } from '../repository/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserNotExistException } from './exception/user-not-exist.exception';
+import { UserAlreadyExistsException } from './exception/user-already-exists.exception';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -16,7 +18,7 @@ export class UserService implements IUserService {
 
   public async create(options: CreateUserOptions): Promise<User> {
     const existingUser = await this.findByEmail(options.email);
-    if (existingUser) throw new Error('User already exists!');
+    if (existingUser) throw new UserAlreadyExistsException();
 
     const user = User.create(options);
     await this.userRepo.save(user);
@@ -26,7 +28,7 @@ export class UserService implements IUserService {
 
   public async delete(id: number): Promise<User> {
     const user = await this.findById(id);
-    if (!user) throw Error('User doesn\'t exist!');
+    if (!user) throw new UserNotExistException();
 
     await this.userRepo.delete({ id });
 
@@ -47,7 +49,7 @@ export class UserService implements IUserService {
 
   public async update(id: number, options: UpdateUserOptions): Promise<User> {
     const user = await this.findById(id);
-    if (!user) throw Error('User doesn\'t exist!');
+    if (!user) throw new UserNotExistException();
 
     await this.userRepo.update({ id }, options);
 
