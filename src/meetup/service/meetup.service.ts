@@ -7,6 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindMeetupOptions } from './options/find-meetup.options';
 import { ArrayContains, FindOptionsWhere } from 'typeorm';
 import { UserService } from '../module/auth/module/user/service/user.service';
+import { MeetupNotExistException } from './exception/meetup-not-exist.exception';
+import { MeetupAlreadyExistsException } from './exception/meetup-already-exists.exception';
+import { GuestAlreadyRegisteredException } from './exception/guest-already-registered.exception';
+import { GuestNotRegisteredException } from './exception/guest-not-registered.exception';
+import { UserNotExistException } from '../module/auth/module/user/service/exception/user-not-exist.exception';
 
 @Injectable()
 export class MeetupService implements IMeetupService {
@@ -21,14 +26,14 @@ export class MeetupService implements IMeetupService {
     const meetup = await this.meetupRepo.findOneBy({
       title: options.title,
     });
-    if (meetup) throw Error('Meetup already exists!');
+    if (meetup) throw new MeetupAlreadyExistsException();
 
     return await this.meetupRepo.save(Meetup.create(options));
   }
 
   public async cancelMeetup(id: number): Promise<Meetup> {
     const meetup = await this.findById(id);
-    if (!meetup) throw Error('Meetup doesn\'t exist!');
+    if (!meetup) throw new MeetupNotExistException();
 
     await this.meetupRepo.delete({ id });
 
@@ -37,7 +42,7 @@ export class MeetupService implements IMeetupService {
 
   public async editMeetup(id: number, options: any): Promise<Meetup> {
     const meetup = await this.findById(id);
-    if (!meetup) throw Error('Meetup doesn\'t exist!');
+    if (!meetup) throw new MeetupNotExistException();
 
     await this.meetupRepo.update({ id }, options);
 
@@ -79,14 +84,14 @@ export class MeetupService implements IMeetupService {
 
   public async registerGuestForMeetup(meetupId: number, userId: number): Promise<void> {
     let meetup = await this.findById(meetupId);
-    if (!meetup) throw new Error('Meetup doesn\'t exist!');
+    if (!meetup) throw new MeetupNotExistException();
 
     const guest = await this.userService.findById(userId);
-    if (!guest) throw new Error('User doesn\'t exist!');
+    if (!guest) throw new UserNotExistException();
 
     const isUserAlreadyRegistered = meetup.guests
       .some((registeredGuest) => registeredGuest.id === guest.id);
-    if (isUserAlreadyRegistered) throw new Error('Guest has already registered for this meetup!');
+    if (isUserAlreadyRegistered) throw new GuestAlreadyRegisteredException();
 
     meetup = meetup.withGuests([...meetup.guests, guest]);
     await this.meetupRepo.save(meetup);
@@ -94,14 +99,14 @@ export class MeetupService implements IMeetupService {
 
   async unregisterGuestForMeetup(meetupId: number, userId: number): Promise<void> {
     let meetup = await this.findById(meetupId);
-    if (!meetup) throw new Error('Meetup doesn\'t exist!');
+    if (!meetup) throw new MeetupNotExistException();
 
     const guest = await this.userService.findById(userId);
-    if (!guest) throw new Error('User doesn\'t exist!');
+    if (!guest) throw new UserNotExistException();
 
     const isUserAlreadyRegistered = meetup.guests
       .some((registeredGuest) => registeredGuest.id === guest.id);
-    if (!isUserAlreadyRegistered) throw new Error('Guest hasn\'t registered for this meetup!');
+    if (!isUserAlreadyRegistered) throw new GuestNotRegisteredException();
 
     const guests = meetup.guests.filter((registeredGuest) => registeredGuest.id !== guest.id);
 
