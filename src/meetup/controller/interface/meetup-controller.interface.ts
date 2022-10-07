@@ -7,7 +7,7 @@ import { Meetup } from '../../entity/meetup/meetup.entity';
 export interface IMeetupController {
   getMany(...args: any[]): Promise<MeetupPageResponse>;
 
-  register(dto: RegisterMeetupDto): Promise<Meetup>;
+  register(dto: RegisterMeetupDto, organizerId: number): Promise<Meetup>;
 
   getById(id: number): Promise<Meetup>;
 

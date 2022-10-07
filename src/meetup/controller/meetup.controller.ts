@@ -44,6 +44,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { UserService } from '../module/auth/module/user/service/user.service';
 
 
 @ApiTags('Meetup')
@@ -53,6 +54,7 @@ import {
 export class MeetupController implements IMeetupController {
   constructor(
     private readonly meetupService: MeetupService,
+    private readonly userService: UserService,
     private readonly meetupMapper: MeetupMapper,
   ) {
   }
@@ -85,10 +87,15 @@ export class MeetupController implements IMeetupController {
   @ApiBody({ type: RegisterMeetupDto })
   @ApiCreatedResponse({ description: '' })
   @UseInterceptors(MeetupAlreadyExistsInterceptor)
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
-  async register(@Body() dto: RegisterMeetupDto): Promise<Meetup> {
-    const meetup = await this.meetupService.registerMeetup({ ...dto });
+  async register(
+    @Body() dto: RegisterMeetupDto,
+    @ExtractedUserId() organizerId: number,
+  ): Promise<Meetup> {
+    const organizer = await this.userService.findById(organizerId);
+    const meetup = await this.meetupService.registerMeetup({ ...dto, organizers: [organizer] });
 
     return meetup;
   }
