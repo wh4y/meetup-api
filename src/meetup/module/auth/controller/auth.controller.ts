@@ -21,7 +21,10 @@ import { SignInDto } from './dto/signin.dto';
 
 
 @ApiTags('Auth')
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(
+  ClassSerializerInterceptor,
+  UserAlreadyExistsInterceptor,
+)
 @UsePipes(new ValidationPipe({ transform: true }))
 @Controller('/auth')
 export class AuthController implements IAuthController {
@@ -48,7 +51,6 @@ export class AuthController implements IAuthController {
   })
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(
-    UserAlreadyExistsInterceptor,
     JwtInterceptor,
   )
   @Post('/signup')
