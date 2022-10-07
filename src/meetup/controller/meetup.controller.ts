@@ -46,6 +46,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from '../module/auth/module/user/service/user.service';
+import { UnregisterGuestDto } from './dto/unregister-guest.dto';
 
 
 @ApiTags('Meetup')
@@ -191,8 +192,12 @@ export class MeetupController implements IMeetupController {
   @UseGuards(AuthGuard('jwt'))
   async unregisterGuestForMeetup(
     @Param('meetupId', new ParseIntPipe()) meetupId: number,
-    @ExtractedUserId() userId: number,
+    @Body() { guestId }: UnregisterGuestDto,
+    @ExtractedUserId() invokerId: number,
   ): Promise<void> {
-    await this.meetupService.unregisterGuestForMeetup(meetupId, userId);
+    const isInvokerOrganizer = await this.meetupService.isUserOrganizerOfMeetup(meetupId, invokerId);
+    if (!isInvokerOrganizer && invokerId !== guestId) throw new ForbiddenException();
+
+    await this.meetupService.unregisterGuestForMeetup(meetupId, guestId);
   }
 }

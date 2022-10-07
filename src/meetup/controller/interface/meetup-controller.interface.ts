@@ -2,6 +2,7 @@ import { RegisterMeetupDto } from '../dto/register-meetup.dto';
 import { EditMeetupDto } from '../dto/edit-meetup.dto';
 import { MeetupPageResponse } from '../response/meetup-page.response';
 import { Meetup } from '../../entity/meetup/meetup.entity';
+import { UnregisterGuestDto } from '../dto/unregister-guest.dto';
 
 
 export interface IMeetupController {
@@ -17,5 +18,5 @@ export interface IMeetupController {
 
   registerGuestForMeetup(meetupId: number, userId: number): Promise<void>;
 
-  unregisterGuestForMeetup(meetupId: number, userId: number): Promise<void>;
+  unregisterGuestForMeetup(meetupId: number, dto: UnregisterGuestDto, invokerId: number): Promise<void>;
 }
