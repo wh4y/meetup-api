@@ -76,7 +76,7 @@ export class MeetupService implements IMeetupService {
   }
 
   public async findById(id: number): Promise<Meetup> {
-    return await this.meetupRepo.findOne({ where: { id }, relations: { guests: true } });
+    return await this.meetupRepo.findOne({ where: { id }, relations: { guests: true, organizers: true } });
   }
 
   public async getTotalCount(options?: FindMeetupOptions): Promise<number> {
@@ -111,9 +111,9 @@ export class MeetupService implements IMeetupService {
     const guest = await this.userService.findById(userId);
     if (!guest) throw new UserNotExistException();
 
-    const isUserAlreadyRegistered = meetup.guests
+    const isUserRegistered = meetup.guests
       .some((registeredGuest) => registeredGuest.id === guest.id);
-    if (!isUserAlreadyRegistered) throw new GuestNotRegisteredException();
+    if (!isUserRegistered) throw new GuestNotRegisteredException();
 
     const guests = meetup.guests.filter((registeredGuest) => registeredGuest.id !== guest.id);
 
