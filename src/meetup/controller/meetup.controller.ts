@@ -127,9 +127,8 @@ export class MeetupController implements IMeetupController {
     @Param('id', new ParseIntPipe()) meetupId: number,
     @ExtractedUserId() organizerId: number,
   ): Promise<Meetup> {
-    const meetup = await this.meetupService.findById(meetupId);
-    if (!meetup.organizers.some(organizer => organizer.id === organizerId))
-      throw new ForbiddenException();
+    const isUserOrganizer = await this.meetupService.isUserOrganizerOfMeetup(meetupId, organizerId);
+    if (!isUserOrganizer) throw new ForbiddenException();
 
     return await this.meetupService.cancelMeetup(meetupId);
   }
@@ -150,9 +149,8 @@ export class MeetupController implements IMeetupController {
     @ExtractedUserId() organizerId: number,
     @Body() dto: EditMeetupDto,
   ): Promise<Meetup> {
-    const meetup = await this.meetupService.findById(meetupId);
-    if (!meetup.organizers.some(organizer => organizer.id === organizerId))
-      throw new ForbiddenException();
+    const isUserOrganizer = await this.meetupService.isUserOrganizerOfMeetup(meetupId, organizerId);
+    if (!isUserOrganizer) throw new ForbiddenException();
 
     return await this.meetupService.editMeetup(meetupId, { ...dto });
   };
