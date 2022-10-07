@@ -125,9 +125,9 @@ export class MeetupController implements IMeetupController {
   @Delete('/cancel/:id')
   async cancel(
     @Param('id', new ParseIntPipe()) meetupId: number,
-    @ExtractedUserId() organizerId: number,
+    @ExtractedUserId() invokerId: number,
   ): Promise<Meetup> {
-    const isUserOrganizer = await this.meetupService.isUserOrganizerOfMeetup(meetupId, organizerId);
+    const isUserOrganizer = await this.meetupService.isUserOrganizerOfMeetup(meetupId, invokerId);
     if (!isUserOrganizer) throw new ForbiddenException();
 
     return await this.meetupService.cancelMeetup(meetupId);
@@ -146,10 +146,10 @@ export class MeetupController implements IMeetupController {
   @Patch('/edit/:id')
   async edit(
     @Param('id', new ParseIntPipe()) meetupId: number,
-    @ExtractedUserId() organizerId: number,
+    @ExtractedUserId() invokerId: number,
     @Body() dto: EditMeetupDto,
   ): Promise<Meetup> {
-    const isUserOrganizer = await this.meetupService.isUserOrganizerOfMeetup(meetupId, organizerId);
+    const isUserOrganizer = await this.meetupService.isUserOrganizerOfMeetup(meetupId, invokerId);
     if (!isUserOrganizer) throw new ForbiddenException();
 
     return await this.meetupService.editMeetup(meetupId, { ...dto });
