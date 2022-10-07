@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   HttpCode,
   HttpStatus,
@@ -11,7 +12,6 @@ import {
   Patch,
   Post,
   Query,
-  UnauthorizedException,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -128,7 +128,7 @@ export class MeetupController implements IMeetupController {
   ): Promise<Meetup> {
     const meetup = await this.meetupService.findById(meetupId);
     if (!meetup.organizers.some(organizer => organizer.id === organizerId))
-      throw new UnauthorizedException();
+      throw new ForbiddenException();
 
     return await this.meetupService.cancelMeetup(meetupId);
   }
@@ -151,7 +151,7 @@ export class MeetupController implements IMeetupController {
   ): Promise<Meetup> {
     const meetup = await this.meetupService.findById(meetupId);
     if (!meetup.organizers.some(organizer => organizer.id === organizerId))
-      throw new UnauthorizedException();
+      throw new ForbiddenException();
 
     return await this.meetupService.editMeetup(meetupId, { ...dto });
   };
