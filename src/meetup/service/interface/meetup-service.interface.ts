@@ -19,4 +19,6 @@ export interface IMeetupService {
   registerGuestForMeetup(meetupId: number, userId: number): Promise<void>;
 
   unregisterGuestForMeetup(meetupId: number, userId: number): Promise<void>;
+
+  isUserOrganizerOfMeetup(meetupId, userId): Promise<boolean>;
 }

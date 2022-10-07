@@ -120,4 +120,9 @@ export class MeetupService implements IMeetupService {
     meetup = meetup.withGuests([...guests]);
     await this.meetupRepo.save(meetup);
   }
+
+  async isUserOrganizerOfMeetup(meetupId: number, userId: number): Promise<boolean> {
+    const meetup = await this.findById(meetupId);
+    return meetup.organizers.some(organizer => organizer.id === userId);
+  }
 }
