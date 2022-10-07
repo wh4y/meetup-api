@@ -50,7 +50,14 @@ import { UnregisterGuestDto } from './dto/unregister-guest.dto';
 
 
 @ApiTags('Meetup')
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(
+  ClassSerializerInterceptor,
+  MeetupNotExistInterceptor,
+  MeetupAlreadyExistsInterceptor,
+  GuestNotRegisteredInterceptor,
+  UserNotExistInterceptor,
+  GuestAlreadyRegisteredInterceptor,
+)
 @UsePipes(new ValidationPipe({ transform: true }))
 @Controller('/meetup')
 export class MeetupController implements IMeetupController {
@@ -89,7 +96,6 @@ export class MeetupController implements IMeetupController {
   @ApiCookieAuth('accessToken')
   @ApiBody({ type: RegisterMeetupDto })
   @ApiCreatedResponse({ description: '' })
-  @UseInterceptors(MeetupAlreadyExistsInterceptor)
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
@@ -118,7 +124,6 @@ export class MeetupController implements IMeetupController {
     description: 'Meetup has been successfully canceled!',
     type: Meetup,
   })
-  @UseInterceptors(MeetupNotExistInterceptor)
   @ApiCookieAuth('accessToken')
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
@@ -140,7 +145,6 @@ export class MeetupController implements IMeetupController {
     type: Meetup,
   })
   @ApiCookieAuth('accessToken')
-  @UseInterceptors(MeetupNotExistInterceptor)
   @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   @Patch('/edit/:id')
@@ -160,11 +164,6 @@ export class MeetupController implements IMeetupController {
   @ApiNoContentResponse({
     description: 'User has been successfully registered for a meetup!',
   })
-  @UseInterceptors(
-    MeetupNotExistInterceptor,
-    GuestAlreadyRegisteredInterceptor,
-    UserNotExistInterceptor,
-  )
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('/register-guest-for-meetup/:meetupId')
   @UseGuards(AuthGuard('jwt'))
@@ -180,11 +179,6 @@ export class MeetupController implements IMeetupController {
   @ApiNoContentResponse({
     description: 'User has been successfully unregistered for a meetup!',
   })
-  @UseInterceptors(
-    MeetupNotExistInterceptor,
-    GuestNotRegisteredInterceptor,
-    UserNotExistInterceptor,
-  )
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/unregister-guest-for-meetup/:meetupId')
   @UseGuards(AuthGuard('jwt'))
