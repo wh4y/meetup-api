@@ -13,6 +13,7 @@ export class Meetup {
   @ApiProperty()
   @Column({
     type: 'varchar',
+    unique: true,
   })
   public readonly title: string;
 
