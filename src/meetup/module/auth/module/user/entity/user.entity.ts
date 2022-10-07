@@ -41,8 +41,16 @@ export class User {
   @ManyToMany(() => Meetup, (meetup) => meetup.guests)
   public readonly signedMeetups: Meetup[];
 
+  @ApiProperty({ type: () => [Meetup] })
+  @ManyToMany(() => Meetup)
+  public readonly registeredMeetups: Meetup[];
+
   public static create(options: CreateUserOptions): User {
-    const user = { ...options, signedMeetups: options.signedMeetups || [] };
+    const user = {
+      ...options,
+      signedMeetups: options.signedMeetups || [],
+      registeredMeetups: options.registeredMeetups || [],
+    };
     Reflect.setPrototypeOf(user, User.prototype);
 
     return user as User;

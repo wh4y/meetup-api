@@ -46,8 +46,13 @@ export class Meetup {
   @JoinTable()
   public readonly guests: User[];
 
+  @ApiProperty({ type: () => [User] })
+  @ManyToMany(() => User, (organizer) => organizer.registeredMeetups)
+  @JoinTable()
+  public readonly organizers: User[];
+
   public static create(options: CreateMeetupOptions): Meetup {
-    const meetup = { ...options, guests: options.guests || [] };
+    const meetup = { ...options, guests: options.guests || [], organizers: options.organizers || [] };
     Reflect.setPrototypeOf(meetup, Meetup.prototype);
 
     return meetup as Meetup;
