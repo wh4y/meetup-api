@@ -42,7 +42,7 @@ export class User {
   public readonly signedMeetups: Meetup[];
 
   @ApiProperty({ type: () => [Meetup] })
-  @ManyToMany(() => Meetup)
+  @ManyToMany(() => Meetup, (meetup) => meetup.organizers)
   public readonly registeredMeetups: Meetup[];
 
   public static create(options: CreateUserOptions): User {
