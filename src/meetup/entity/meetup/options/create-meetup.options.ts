@@ -7,4 +7,5 @@ export interface CreateMeetupOptions {
   address: string;
   tags: string [];
   guests?: User[];
+  organizers?: User[];
 }

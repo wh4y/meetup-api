@@ -6,4 +6,5 @@ export interface CreateUserOptions {
   firstName: string;
   lastName: string;
   signedMeetups?: Meetup[];
+  registeredMeetups?: Meetup[];
 }
