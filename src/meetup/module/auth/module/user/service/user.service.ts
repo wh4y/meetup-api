@@ -36,11 +36,17 @@ export class UserService implements IUserService {
   }
 
   public async findById(id: number): Promise<User> {
-    return await this.userRepo.findOne({ where: { id }, relations: { signedMeetups: true } });
+    return await this.userRepo.findOne({
+      where: { id },
+      relations: { signedMeetups: true, registeredMeetups: true },
+    });
   }
 
   public async findByEmail(email: string): Promise<User> {
-    return await this.userRepo.findOne({ where: { email }, relations: { signedMeetups: true } });
+    return await this.userRepo.findOne({
+      where: { email },
+      relations: { signedMeetups: true, registeredMeetups: true },
+    });
   }
 
   public async findMany(options: any): Promise<User[]> {
