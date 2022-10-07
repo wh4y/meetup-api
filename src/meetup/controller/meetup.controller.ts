@@ -11,6 +11,7 @@ import {
   Patch,
   Post,
   Query,
+  UnauthorizedException,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -84,6 +85,7 @@ export class MeetupController implements IMeetupController {
     description: 'Meetup has been successfully registered!',
     type: Meetup,
   })
+  @ApiCookieAuth('accessToken')
   @ApiBody({ type: RegisterMeetupDto })
   @ApiCreatedResponse({ description: '' })
   @UseInterceptors(MeetupAlreadyExistsInterceptor)
@@ -116,12 +118,19 @@ export class MeetupController implements IMeetupController {
     type: Meetup,
   })
   @UseInterceptors(MeetupNotExistInterceptor)
+  @ApiCookieAuth('accessToken')
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   @Delete('/cancel/:id')
-  async cancel(@Param('id', new ParseIntPipe()) id: number): Promise<Meetup> {
-    const meetup = await this.meetupService.cancelMeetup(id);
+  async cancel(
+    @Param('id', new ParseIntPipe()) meetupId: number,
+    @ExtractedUserId() organizerId: number,
+  ): Promise<Meetup> {
+    const meetup = await this.meetupService.findById(meetupId);
+    if (!meetup.organizers.some(organizer => organizer.id === organizerId))
+      throw new UnauthorizedException();
 
-    return meetup;
+    return await this.meetupService.cancelMeetup(meetupId);
   }
 
   @ApiParam({ name: 'id' })
@@ -130,16 +139,21 @@ export class MeetupController implements IMeetupController {
     description: 'Meetup has been updated!',
     type: Meetup,
   })
+  @ApiCookieAuth('accessToken')
   @UseInterceptors(MeetupNotExistInterceptor)
+  @UseGuards(AuthGuard('jwt'))
   @HttpCode(HttpStatus.OK)
   @Patch('/edit/:id')
   async edit(
-    @Param('id', new ParseIntPipe()) id: number,
+    @Param('id', new ParseIntPipe()) meetupId: number,
+    @ExtractedUserId() organizerId: number,
     @Body() dto: EditMeetupDto,
   ): Promise<Meetup> {
-    const meetup = await this.meetupService.editMeetup(id, { ...dto });
+    const meetup = await this.meetupService.findById(meetupId);
+    if (!meetup.organizers.some(organizer => organizer.id === organizerId))
+      throw new UnauthorizedException();
 
-    return meetup;
+    return await this.meetupService.editMeetup(meetupId, { ...dto });
   };
 
   @ApiParam({ name: 'meetupId' })
