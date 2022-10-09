@@ -10,5 +10,7 @@ export interface IAuthService {
 
   generateAccessToken(payload: JwtPayload): string;
 
+  generateRefreshToken(payload: JwtPayload): string;
+
   verifyJWTPayload(payload: JwtPayload): Promise<User | null>;
 }
