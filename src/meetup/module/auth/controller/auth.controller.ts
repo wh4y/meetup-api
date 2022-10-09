@@ -51,7 +51,7 @@ export class AuthController implements IAuthController {
   @Post('/signin')
   @UseInterceptors(AttachJwtInterceptor)
   @UseGuards(AuthGuard('local'))
-  async signIn(@AuthedUser() user: User): Promise<User> {
+  public async signIn(@AuthedUser() user: User): Promise<User> {
     return user;
   }
 
@@ -65,7 +65,7 @@ export class AuthController implements IAuthController {
     AttachJwtInterceptor,
   )
   @Post('/signup')
-  async signUp(@Body() dto: SignUpDto): Promise<User> {
+  public async signUp(@Body() dto: SignUpDto): Promise<User> {
     return await this.authService.signUp(dto);
   }
 
@@ -76,7 +76,7 @@ export class AuthController implements IAuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard('refresh-jwt'))
   @Get('/refresh-tokens')
-  async refreshTokens(@AuthedUser() user: User, @Res() res: Response): Promise<void> {
+  public async refreshTokens(@AuthedUser() user: User, @Res() res: Response): Promise<void> {
     const jWTPayload = { email: user.email, sub: String(user.id) };
     const newAccessToken = this.tokenService.generateAccessToken(jWTPayload);
     const newRefreshToken = this.tokenService.generateRefreshToken(jWTPayload);
