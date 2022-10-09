@@ -47,11 +47,16 @@ export class AuthService implements IAuthService {
 
   private generateJWT<P extends Object>(payload: P, type: string): string {
     const expiresIn = this.configService.get<string>(`JWT_${type.toUpperCase()}_EXPIRES_IN`);
-    return this.jWTService.sign(payload, { expiresIn });
+    const secret = this.configService.get<string>(`JWT_${type.toUpperCase()}_SECRET`);
+    return this.jWTService.sign(payload, { expiresIn, secret });
   }
 
   public generateAccessToken(payload: JwtPayload): string {
     return this.generateJWT(payload, 'ACCESS');
+  }
+
+  public generateRefreshToken(payload: JwtPayload): string {
+    return this.generateJWT(payload, 'REFRESH');
   }
 
   public async verifyJWTPayload(payload: JwtPayload): Promise<User | null> {
