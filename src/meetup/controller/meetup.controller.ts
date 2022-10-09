@@ -28,7 +28,6 @@ import { MeetupPaginationDto } from './dto/meetup-pagination.dto';
 import { PaginationDtoPipe } from './pipe/pagination-dto.pipe';
 import { MeetupMapper } from './mapper/meetup/meetup.mapper';
 import { Meetup } from '../entity/meetup/meetup.entity';
-import { AuthGuard } from '@nestjs/passport';
 import { ExtractedUserId } from './decorator/extracted-user-id.decorator';
 import { MeetupNotExistInterceptor } from './interceptor/meetup-not-exist.interceptor';
 import { MeetupAlreadyExistsInterceptor } from './interceptor/meetup-already-exists.interceptor';
@@ -48,6 +47,7 @@ import {
 import { UserService } from '../module/auth/module/user/service/user.service';
 import { UnregisterGuestDto } from './dto/unregister-guest.dto';
 import { ACCESS_TOKEN } from '../module/auth/controller/cookie/access-token.cookie';
+import { AccessJwtAuthGuard } from '../module/auth/controller/guard/access-jwt-auth.guard';
 
 
 @ApiTags('Meetup')
@@ -96,8 +96,7 @@ export class MeetupController implements IMeetupController {
   })
   @ApiCookieAuth(ACCESS_TOKEN)
   @ApiBody({ type: RegisterMeetupDto })
-  @ApiCreatedResponse({ description: '' })
-  @UseGuards(AuthGuard('access-jwt'))
+  @UseGuards(AccessJwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
   async register(
@@ -126,7 +125,7 @@ export class MeetupController implements IMeetupController {
     type: Meetup,
   })
   @ApiCookieAuth(ACCESS_TOKEN)
-  @UseGuards(AuthGuard('access-jwt'))
+  @UseGuards(AccessJwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Delete('/cancel/:id')
   async cancel(
@@ -146,7 +145,7 @@ export class MeetupController implements IMeetupController {
     type: Meetup,
   })
   @ApiCookieAuth(ACCESS_TOKEN)
-  @UseGuards(AuthGuard('access-jwt'))
+  @UseGuards(AccessJwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Patch('/edit/:id')
   async edit(
@@ -167,7 +166,7 @@ export class MeetupController implements IMeetupController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('/register-guest-for-meetup/:meetupId')
-  @UseGuards(AuthGuard('access-jwt'))
+  @UseGuards(AccessJwtAuthGuard)
   async registerGuestForMeetup(
     @Param('meetupId', new ParseIntPipe()) meetupId: number,
     @ExtractedUserId() userId: number,
@@ -182,7 +181,7 @@ export class MeetupController implements IMeetupController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/unregister-guest-for-meetup/:meetupId')
-  @UseGuards(AuthGuard('access-jwt'))
+  @UseGuards(AccessJwtAuthGuard)
   async unregisterGuestForMeetup(
     @Param('meetupId', new ParseIntPipe()) meetupId: number,
     @Body() { guestId }: UnregisterGuestDto,

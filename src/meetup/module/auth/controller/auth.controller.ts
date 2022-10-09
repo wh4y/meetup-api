@@ -33,6 +33,7 @@ import { TokenService } from '../service/token/token.service';
 import { Response } from 'express';
 import { AccessTokenCookie } from './cookie/access-token.cookie';
 import { REFRESH_TOKEN, RefreshTokenCookie } from './cookie/refresh-token.cookie';
+import { RefreshJwtAuthGuard } from './guard/refresh-jwt-auth.guard';
 
 
 @ApiTags('Auth')
@@ -82,7 +83,7 @@ export class AuthController implements IAuthController {
   })
   @ApiCookieAuth(REFRESH_TOKEN)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(AuthGuard('refresh-jwt'))
+  @UseGuards(RefreshJwtAuthGuard)
   @Get('/refresh-tokens')
   public async refreshTokens(@AuthedUser() user: User, @Res() res: Response): Promise<void> {
     const [newAccessToken, newRefreshToken] = this.tokenService.generateTokensFromUser(user);
