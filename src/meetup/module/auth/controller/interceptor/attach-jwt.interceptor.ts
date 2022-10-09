@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { TokenService } from '../../service/token/token.service';
 
 @Injectable()
-export class JwtInterceptor implements NestInterceptor {
+export class AttachJwtInterceptor implements NestInterceptor {
   constructor(private readonly tokenService: TokenService) {
   }
 
