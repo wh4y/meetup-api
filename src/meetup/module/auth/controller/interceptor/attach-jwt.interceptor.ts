@@ -9,7 +9,7 @@ import { RefreshTokenCookie } from '../cookie/refresh-token.cookie';
 @Injectable()
 export class AttachJwtInterceptor implements NestInterceptor {
   constructor(
-    private readonly tokenService: TokenService
+    private readonly tokenService: TokenService,
   ) {
   }
 
@@ -21,12 +21,10 @@ export class AttachJwtInterceptor implements NestInterceptor {
       map(user => {
         const res = context.switchToHttp().getResponse<Response>();
 
-        const jWTPayload = { email: user.email, sub: String(user.id) };
-        const newAccessToken = this.tokenService.generateAccessToken(jWTPayload);
-        const newRefreshToken = this.tokenService.generateRefreshToken(jWTPayload);
+        const [accessToken, refreshToken] = this.tokenService.generateTokensFromUser(user);
 
-        const accessTokenCookie = new AccessTokenCookie(newAccessToken);
-        const refreshTokenCookie = new RefreshTokenCookie(newRefreshToken);
+        const accessTokenCookie = new AccessTokenCookie(accessToken);
+        const refreshTokenCookie = new RefreshTokenCookie(refreshToken);
 
         res.cookie(accessTokenCookie.name, accessTokenCookie.val, accessTokenCookie.options);
         res.cookie(refreshTokenCookie.name, refreshTokenCookie.val, refreshTokenCookie.options);
