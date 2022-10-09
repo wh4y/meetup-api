@@ -179,6 +179,7 @@ export class MeetupController implements IMeetupController {
   @ApiNoContentResponse({
     description: 'User has been successfully unregistered for a meetup!',
   })
+  @ApiBody({type: UnregisterGuestDto})
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/unregister-guest-for-meetup/:meetupId')
   @UseGuards(AccessJwtAuthGuard)
