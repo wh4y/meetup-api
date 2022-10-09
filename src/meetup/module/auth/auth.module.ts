@@ -5,6 +5,7 @@ import { LocalStrategy } from './controller/strategy/local.strategy';
 import { AuthController } from './controller/auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { AccessJwtStrategy } from './controller/strategy/access-jwt.strategy';
+import { TokenService } from './service/token/token.service';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AccessJwtStrategy } from './controller/strategy/access-jwt.strategy';
   ],
   providers: [
     AuthService,
+    TokenService,
     LocalStrategy,
     AccessJwtStrategy,
   ],
