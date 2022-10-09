@@ -20,7 +20,14 @@ import { IAuthController } from './interface/auth-controller.interface';
 import { AuthedUser } from './decorator/authed-user.decorator';
 import { AttachJwtInterceptor } from './interceptor/attach-jwt.interceptor';
 import { UserAlreadyExistsInterceptor } from '../module/user/controller/interceptor/user-already-exists.interceptor';
-import { ApiBody, ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { SignInDto } from './dto/signin.dto';
 import { TokenService } from '../service/token/token.service';
 import { Response } from 'express';
@@ -73,6 +80,7 @@ export class AuthController implements IAuthController {
     description: 'New tokens attached as cookies!',
     type: null,
   })
+  @ApiCookieAuth('accessToken')
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard('refresh-jwt'))
   @Get('/refresh-tokens')
