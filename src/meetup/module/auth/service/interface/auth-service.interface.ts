@@ -8,5 +8,7 @@ export interface IAuthService {
 
   signIn(options: SignInOptions): Promise<User>;
 
+  generateAccessToken(payload: JwtPayload): string;
+
   verifyJWTPayload(payload: JwtPayload): Promise<User | null>;
 }
