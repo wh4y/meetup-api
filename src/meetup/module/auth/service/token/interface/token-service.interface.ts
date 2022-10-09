@@ -6,5 +6,7 @@ export interface ITokenService {
 
   generateRefreshToken(payload: JwtPayload): string;
 
+  generateTokensFromUser(user: User): string[];
+
   verifyJWTPayload(payload: JwtPayload): Promise<User | null>;
 }

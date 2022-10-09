@@ -29,6 +29,14 @@ export class TokenService implements ITokenService {
     return this.generateJWT(payload, 'REFRESH');
   }
 
+  public generateTokensFromUser(user: User): string[] {
+    const jWTPayload = { email: user.email, sub: String(user.id) };
+    const accessToken = this.generateAccessToken(jWTPayload);
+    const refreshToken = this.generateRefreshToken(jWTPayload);
+
+    return [accessToken, refreshToken];
+  }
+
   public async verifyJWTPayload(payload: JwtPayload): Promise<User | null> {
     return await this.userService.findByEmail(payload.email);
   }
