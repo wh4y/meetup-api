@@ -3,10 +3,14 @@ import { map, Observable } from 'rxjs';
 import { User } from '../../module/user/entity/user.entity';
 import { Response } from 'express';
 import { TokenService } from '../../service/token/token.service';
+import { AccessTokenCookie } from '../cookie/access-token.cookie';
+import { RefreshTokenCookie } from '../cookie/refresh-token.cookie';
 
 @Injectable()
 export class AttachJwtInterceptor implements NestInterceptor {
-  constructor(private readonly tokenService: TokenService) {
+  constructor(
+    private readonly tokenService: TokenService
+  ) {
   }
 
   intercept(
@@ -15,27 +19,17 @@ export class AttachJwtInterceptor implements NestInterceptor {
   ): Observable<User> {
     return next.handle().pipe(
       map(user => {
-        const response = context.switchToHttp().getResponse<Response>();
+        const res = context.switchToHttp().getResponse<Response>();
 
-        const accessToken = this.tokenService.generateAccessToken({
-          email: user.email,
-          sub: String(user.id),
-        });
+        const jWTPayload = { email: user.email, sub: String(user.id) };
+        const newAccessToken = this.tokenService.generateAccessToken(jWTPayload);
+        const newRefreshToken = this.tokenService.generateRefreshToken(jWTPayload);
 
-        response.cookie('accessToken', accessToken, {
-          httpOnly: true,
-          sameSite: 'strict',
-        });
+        const accessTokenCookie = new AccessTokenCookie(newAccessToken);
+        const refreshTokenCookie = new RefreshTokenCookie(newRefreshToken);
 
-        const refreshToken = this.tokenService.generateRefreshToken({
-          email: user.email,
-          sub: String(user.id),
-        });
-
-        response.cookie('refreshToken', refreshToken, {
-          httpOnly: true,
-          sameSite: 'strict',
-        });
+        res.cookie(accessTokenCookie.name, accessTokenCookie.val, accessTokenCookie.options);
+        res.cookie(refreshTokenCookie.name, refreshTokenCookie.val, refreshTokenCookie.options);
 
         return user;
       }),
