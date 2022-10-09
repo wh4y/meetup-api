@@ -1,4 +1,4 @@
-import { JwtPayload } from '../../../controller/interface/jwt-payload.interface';
+import { JwtPayload } from './jwt-payload.interface';
 import { User } from '../../../module/user/entity/user.entity';
 
 export interface ITokenService {

@@ -1,5 +1,5 @@
 import { ITokenService } from './interface/token-service.interface';
-import { JwtPayload } from '../../controller/interface/jwt-payload.interface';
+import { JwtPayload } from './interface/jwt-payload.interface';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../../module/user/entity/user.entity';
