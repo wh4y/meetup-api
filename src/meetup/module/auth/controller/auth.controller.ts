@@ -77,9 +77,7 @@ export class AuthController implements IAuthController {
   @UseGuards(AuthGuard('refresh-jwt'))
   @Get('/refresh-tokens')
   public async refreshTokens(@AuthedUser() user: User, @Res() res: Response): Promise<void> {
-    const jWTPayload = { email: user.email, sub: String(user.id) };
-    const newAccessToken = this.tokenService.generateAccessToken(jWTPayload);
-    const newRefreshToken = this.tokenService.generateRefreshToken(jWTPayload);
+    const [newAccessToken, newRefreshToken] = this.tokenService.generateTokensFromUser(user);
 
     const accessTokenCookie = new AccessTokenCookie(newAccessToken);
     const refreshTokenCookie = new RefreshTokenCookie(newRefreshToken);
