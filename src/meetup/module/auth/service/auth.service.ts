@@ -45,14 +45,14 @@ export class AuthService implements IAuthService {
     return user;
   }
 
-  generateAccessToken(payload: JwtPayload): string {
+  public generateAccessToken(payload: JwtPayload): string {
     const expiresIn = this.configService.get<string>('JWT_ACCESS_EXPIRES_IN');
     const token = this.jWTService.sign(payload, { expiresIn });
 
     return token;
   }
 
-  async verifyJWTPayload(payload: JwtPayload): Promise<User | null> {
+  public async verifyJWTPayload(payload: JwtPayload): Promise<User | null> {
     return await this.userService.findByEmail(payload.email);
   }
 }
