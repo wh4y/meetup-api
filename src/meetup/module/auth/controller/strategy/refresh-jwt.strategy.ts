@@ -8,8 +8,10 @@ import extractJwtFromCookies from '../../../../../shared/module/auth/Jwt/util/ex
 import { TokenService } from '../../service/token/token.service';
 import { REFRESH_TOKEN } from '../cookie/refresh-token.cookie';
 
+export const REFRESH_JWT_STRATEGY = 'REFRESH_JWT_STRATEGY';
+
 @Injectable()
-export class RefreshJwtStrategy extends PassportStrategy(Strategy, 'refresh-jwt') {
+export class RefreshJwtStrategy extends PassportStrategy(Strategy, REFRESH_JWT_STRATEGY) {
   constructor(
     private readonly tokenService: TokenService,
     private readonly configService: ConfigService,

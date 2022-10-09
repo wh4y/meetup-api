@@ -8,8 +8,10 @@ import extractJwtFromCookies from '../../../../../shared/module/auth/Jwt/util/ex
 import { TokenService } from '../../service/token/token.service';
 import { ACCESS_TOKEN } from '../cookie/access-token.cookie';
 
+export const ACCESS_JWT_STRATEGY = 'ACCESS_JWT_STRATEGY'
+
 @Injectable()
-export class AccessJwtStrategy extends PassportStrategy(Strategy, 'access-jwt') {
+export class AccessJwtStrategy extends PassportStrategy(Strategy, ACCESS_JWT_STRATEGY) {
   constructor(
     private readonly tokenService: TokenService,
     private readonly configService: ConfigService,

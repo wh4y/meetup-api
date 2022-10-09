@@ -6,9 +6,10 @@ import { Request } from 'express';
 import { User } from '../../module/user/entity/user.entity';
 import { SignInDto } from '../dto/signin.dto';
 
+export const LOCAL_STRATEGY = 'LOCAL_STRATEGY';
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
+export class LocalStrategy extends PassportStrategy(Strategy, LOCAL_STRATEGY) {
   constructor(private readonly authService: AuthService) {
     super({
       usernameField: 'email',
