@@ -45,11 +45,13 @@ export class AuthService implements IAuthService {
     return user;
   }
 
-  public generateAccessToken(payload: JwtPayload): string {
-    const expiresIn = this.configService.get<string>('JWT_ACCESS_EXPIRES_IN');
-    const token = this.jWTService.sign(payload, { expiresIn });
+  private generateJWT<P extends Object>(payload: P, type: string): string {
+    const expiresIn = this.configService.get<string>(`JWT_${type.toUpperCase()}_EXPIRES_IN`);
+    return this.jWTService.sign(payload, { expiresIn });
+  }
 
-    return token;
+  public generateAccessToken(payload: JwtPayload): string {
+    return this.generateJWT(payload, 'ACCESS');
   }
 
   public async verifyJWTPayload(payload: JwtPayload): Promise<User | null> {
