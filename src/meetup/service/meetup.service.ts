@@ -123,6 +123,8 @@ export class MeetupService implements IMeetupService {
 
   async isUserOrganizerOfMeetup(meetupId: number, userId: number): Promise<boolean> {
     const meetup = await this.findById(meetupId);
+    if (!meetup) throw new MeetupNotExistException();
+
     return meetup.organizers.some(organizer => organizer.id === userId);
   }
 }
