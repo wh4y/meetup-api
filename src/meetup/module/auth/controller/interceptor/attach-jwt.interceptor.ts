@@ -27,7 +27,7 @@ export class AttachJwtInterceptor implements NestInterceptor {
           sameSite: 'strict',
         });
 
-        const refreshToken = this.tokenService.generateAccessToken({
+        const refreshToken = this.tokenService.generateRefreshToken({
           email: user.email,
           sub: String(user.id),
         });
