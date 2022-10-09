@@ -12,7 +12,6 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../service/auth/auth.service';
 import { User } from '../module/user/entity/user.entity';
 import { SignUpDto } from './dto/signup.dto';
@@ -34,6 +33,7 @@ import { Response } from 'express';
 import { AccessTokenCookie } from './cookie/access-token.cookie';
 import { REFRESH_TOKEN, RefreshTokenCookie } from './cookie/refresh-token.cookie';
 import { RefreshJwtAuthGuard } from './guard/refresh-jwt-auth.guard';
+import { LocalAuthGuard } from './guard/local-auth.guard';
 
 
 @ApiTags('Auth')
@@ -58,7 +58,7 @@ export class AuthController implements IAuthController {
   @HttpCode(HttpStatus.OK)
   @Post('/signin')
   @UseInterceptors(AttachJwtInterceptor)
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   public async signIn(@AuthedUser() user: User): Promise<User> {
     return user;
   }
