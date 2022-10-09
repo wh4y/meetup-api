@@ -1,4 +1,4 @@
-import { Cookie } from './class/cookie';
+import { Cookie } from '../../../../../shared/module/cookie/class/cookie';
 import { CookieOptions } from 'express';
 
 const options: CookieOptions = {
