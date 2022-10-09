@@ -16,19 +16,25 @@ export class JwtInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map(user => {
         const response = context.switchToHttp().getResponse<Response>();
-        const token = this.tokenService.generateAccessToken({
+
+        const accessToken = this.tokenService.generateAccessToken({
           email: user.email,
           sub: String(user.id),
         });
 
-        const currentDatetime = new Date();
-        currentDatetime.setMinutes(currentDatetime.getMinutes() + 1);
-        const cookieExpiresIn = currentDatetime;
-
-        response.cookie('accessToken', token, {
+        response.cookie('accessToken', accessToken, {
           httpOnly: true,
           sameSite: 'strict',
-          expires: cookieExpiresIn,
+        });
+
+        const refreshToken = this.tokenService.generateAccessToken({
+          email: user.email,
+          sub: String(user.id),
+        });
+
+        response.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          sameSite: 'strict',
         });
 
         return user;
