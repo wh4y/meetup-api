@@ -6,10 +6,10 @@ const options: CookieOptions = {
   sameSite: 'strict',
 };
 
-const name = 'accessToken';
+export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 
 export class AccessTokenCookie extends Cookie<string> {
   constructor(public readonly value: string) {
-    super(name, value, options);
+    super(ACCESS_TOKEN, value, options);
   }
 }

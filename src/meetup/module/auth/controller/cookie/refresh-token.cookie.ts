@@ -7,10 +7,10 @@ const options: CookieOptions = {
   path: '/api/v1/auth/refresh-tokens',
 };
 
-const name = 'refreshToken';
+export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 
 export class RefreshTokenCookie extends Cookie<string> {
   constructor(public readonly value: string) {
-    super(name, value, options);
+    super(REFRESH_TOKEN, value, options);
   }
 }
