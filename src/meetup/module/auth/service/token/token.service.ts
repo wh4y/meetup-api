@@ -4,7 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../../module/user/entity/user.entity';
 import { UserService } from '../../module/user/service/user.service';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class TokenService implements ITokenService {
   constructor(
     private readonly configService: ConfigService,
