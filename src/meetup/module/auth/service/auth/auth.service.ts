@@ -1,14 +1,14 @@
 import { IAuthService } from './interface/auth-service.interface';
 import { Injectable } from '@nestjs/common';
-import { User } from '../module/user/entity/user.entity';
+import { User } from '../../module/user/entity/user.entity';
 import { SignInOptions } from './options/signin.options';
 import { SignUpOptions } from './options/signup.options';
-import { UserService } from '../module/user/service/user.service';
+import { UserService } from '../../module/user/service/user.service';
 import * as bcrypt from 'bcrypt';
-import { JwtPayload } from '../controller/interface/jwt-payload.interface';
+import { JwtPayload } from '../../controller/interface/jwt-payload.interface';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UserAlreadyExistsException } from '../module/user/service/exception/user-already-exists.exception';
+import { UserAlreadyExistsException } from '../../module/user/service/exception/user-already-exists.exception';
 
 
 @Injectable()

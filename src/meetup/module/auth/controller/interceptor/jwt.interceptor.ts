@@ -1,5 +1,5 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import { AuthService } from '../../service/auth.service';
+import { AuthService } from '../../service/auth/auth.service';
 import { map, Observable } from 'rxjs';
 import { User } from '../../module/user/entity/user.entity';
 import { Response } from 'express';
