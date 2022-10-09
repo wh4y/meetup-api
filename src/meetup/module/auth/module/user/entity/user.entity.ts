@@ -17,7 +17,6 @@ export class User {
   })
   public readonly email: string;
 
-  @ApiProperty()
   @Column({
     unique: true,
     type: 'varchar',
