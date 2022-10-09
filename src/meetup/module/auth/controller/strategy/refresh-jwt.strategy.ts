@@ -6,6 +6,7 @@ import { User } from '../../module/user/entity/user.entity';
 import { JwtPayload } from '../../service/token/interface/jwt-payload.interface';
 import extractJwtFromCookies from '../../../../../shared/module/auth/Jwt/util/extractJwtFromCookies';
 import { TokenService } from '../../service/token/token.service';
+import { REFRESH_TOKEN } from '../cookie/refresh-token.cookie';
 
 @Injectable()
 export class RefreshJwtStrategy extends PassportStrategy(Strategy, 'refresh-jwt') {
@@ -14,7 +15,7 @@ export class RefreshJwtStrategy extends PassportStrategy(Strategy, 'refresh-jwt'
     private readonly configService: ConfigService,
   ) {
     super({
-      jwtFromRequest: extractJwtFromCookies('refreshToken'),
+      jwtFromRequest: extractJwtFromCookies(REFRESH_TOKEN),
       secretOrKey: configService.get<string>('JWT_REFRESH_SECRET'),
       ignoreExpiration: false,
       passReqToCallback: false,

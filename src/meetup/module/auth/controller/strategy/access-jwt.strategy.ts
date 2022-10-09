@@ -6,6 +6,7 @@ import { User } from '../../module/user/entity/user.entity';
 import { JwtPayload } from '../../service/token/interface/jwt-payload.interface';
 import extractJwtFromCookies from '../../../../../shared/module/auth/Jwt/util/extractJwtFromCookies';
 import { TokenService } from '../../service/token/token.service';
+import { ACCESS_TOKEN } from '../cookie/access-token.cookie';
 
 @Injectable()
 export class AccessJwtStrategy extends PassportStrategy(Strategy, 'access-jwt') {
@@ -14,7 +15,7 @@ export class AccessJwtStrategy extends PassportStrategy(Strategy, 'access-jwt') 
     private readonly configService: ConfigService,
   ) {
     super({
-      jwtFromRequest: extractJwtFromCookies('accessToken'),
+      jwtFromRequest: extractJwtFromCookies(ACCESS_TOKEN),
       secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
       ignoreExpiration: false,
       passReqToCallback: false,

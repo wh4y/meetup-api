@@ -47,6 +47,7 @@ import {
 } from '@nestjs/swagger';
 import { UserService } from '../module/auth/module/user/service/user.service';
 import { UnregisterGuestDto } from './dto/unregister-guest.dto';
+import { ACCESS_TOKEN } from '../module/auth/controller/cookie/access-token.cookie';
 
 
 @ApiTags('Meetup')
@@ -93,7 +94,7 @@ export class MeetupController implements IMeetupController {
     description: 'Meetup has been successfully registered!',
     type: Meetup,
   })
-  @ApiCookieAuth('accessToken')
+  @ApiCookieAuth(ACCESS_TOKEN)
   @ApiBody({ type: RegisterMeetupDto })
   @ApiCreatedResponse({ description: '' })
   @UseGuards(AuthGuard('access-jwt'))
@@ -124,7 +125,7 @@ export class MeetupController implements IMeetupController {
     description: 'Meetup has been successfully canceled!',
     type: Meetup,
   })
-  @ApiCookieAuth('accessToken')
+  @ApiCookieAuth(ACCESS_TOKEN)
   @UseGuards(AuthGuard('access-jwt'))
   @HttpCode(HttpStatus.OK)
   @Delete('/cancel/:id')
@@ -144,7 +145,7 @@ export class MeetupController implements IMeetupController {
     description: 'Meetup has been updated!',
     type: Meetup,
   })
-  @ApiCookieAuth('accessToken')
+  @ApiCookieAuth(ACCESS_TOKEN)
   @UseGuards(AuthGuard('access-jwt'))
   @HttpCode(HttpStatus.OK)
   @Patch('/edit/:id')
@@ -160,7 +161,7 @@ export class MeetupController implements IMeetupController {
   };
 
   @ApiParam({ name: 'meetupId' })
-  @ApiCookieAuth('accessToken')
+  @ApiCookieAuth(ACCESS_TOKEN)
   @ApiNoContentResponse({
     description: 'User has been successfully registered for a meetup!',
   })
@@ -175,7 +176,7 @@ export class MeetupController implements IMeetupController {
   }
 
   @ApiParam({ name: 'meetupId' })
-  @ApiCookieAuth('accessToken')
+  @ApiCookieAuth(ACCESS_TOKEN)
   @ApiNoContentResponse({
     description: 'User has been successfully unregistered for a meetup!',
   })

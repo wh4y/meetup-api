@@ -32,7 +32,7 @@ import { SignInDto } from './dto/signin.dto';
 import { TokenService } from '../service/token/token.service';
 import { Response } from 'express';
 import { AccessTokenCookie } from './cookie/access-token.cookie';
-import { RefreshTokenCookie } from './cookie/refresh-token.cookie';
+import { REFRESH_TOKEN, RefreshTokenCookie } from './cookie/refresh-token.cookie';
 
 
 @ApiTags('Auth')
@@ -80,7 +80,7 @@ export class AuthController implements IAuthController {
     description: 'New tokens attached as cookies!',
     type: null,
   })
-  @ApiCookieAuth('accessToken')
+  @ApiCookieAuth(REFRESH_TOKEN)
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard('refresh-jwt'))
   @Get('/refresh-tokens')
