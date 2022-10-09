@@ -8,7 +8,7 @@ import { AuthService } from '../../service/auth.service';
 import extractJwtFromCookies from '../../../../../shared/module/auth/Jwt/util/extractJwtFromCookies';
 
 @Injectable()
-export class AccessJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class AccessJwtStrategy extends PassportStrategy(Strategy, 'access-jwt') {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,

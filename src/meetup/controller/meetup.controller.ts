@@ -96,7 +96,7 @@ export class MeetupController implements IMeetupController {
   @ApiCookieAuth('accessToken')
   @ApiBody({ type: RegisterMeetupDto })
   @ApiCreatedResponse({ description: '' })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('access-jwt'))
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
   async register(
@@ -125,7 +125,7 @@ export class MeetupController implements IMeetupController {
     type: Meetup,
   })
   @ApiCookieAuth('accessToken')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('access-jwt'))
   @HttpCode(HttpStatus.OK)
   @Delete('/cancel/:id')
   async cancel(
@@ -145,7 +145,7 @@ export class MeetupController implements IMeetupController {
     type: Meetup,
   })
   @ApiCookieAuth('accessToken')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('access-jwt'))
   @HttpCode(HttpStatus.OK)
   @Patch('/edit/:id')
   async edit(
@@ -166,7 +166,7 @@ export class MeetupController implements IMeetupController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Post('/register-guest-for-meetup/:meetupId')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('access-jwt'))
   async registerGuestForMeetup(
     @Param('meetupId', new ParseIntPipe()) meetupId: number,
     @ExtractedUserId() userId: number,
@@ -181,7 +181,7 @@ export class MeetupController implements IMeetupController {
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/unregister-guest-for-meetup/:meetupId')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('access-jwt'))
   async unregisterGuestForMeetup(
     @Param('meetupId', new ParseIntPipe()) meetupId: number,
     @Body() { guestId }: UnregisterGuestDto,
