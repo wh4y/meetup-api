@@ -5,9 +5,6 @@ import { SignInOptions } from './options/signin.options';
 import { SignUpOptions } from './options/signup.options';
 import { UserService } from '../../module/user/service/user.service';
 import * as bcrypt from 'bcrypt';
-import { JwtPayload } from '../../controller/interface/jwt-payload.interface';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import { UserAlreadyExistsException } from '../../module/user/service/exception/user-already-exists.exception';
 
 
@@ -15,8 +12,6 @@ import { UserAlreadyExistsException } from '../../module/user/service/exception/
 export class AuthService implements IAuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly configService: ConfigService,
-    private readonly jWTService: JwtService,
   ) {
   }
 
@@ -43,23 +38,5 @@ export class AuthService implements IAuthService {
 
     const user = await this.userService.create({ ...options, password: hashedPassword });
     return user;
-  }
-
-  private generateJWT<P extends Object>(payload: P, type: string): string {
-    const expiresIn = this.configService.get<string>(`JWT_${type.toUpperCase()}_EXPIRES_IN`);
-    const secret = this.configService.get<string>(`JWT_${type.toUpperCase()}_SECRET`);
-    return this.jWTService.sign(payload, { expiresIn, secret });
-  }
-
-  public generateAccessToken(payload: JwtPayload): string {
-    return this.generateJWT(payload, 'ACCESS');
-  }
-
-  public generateRefreshToken(payload: JwtPayload): string {
-    return this.generateJWT(payload, 'REFRESH');
-  }
-
-  public async verifyJWTPayload(payload: JwtPayload): Promise<User | null> {
-    return await this.userService.findByEmail(payload.email);
   }
 }
