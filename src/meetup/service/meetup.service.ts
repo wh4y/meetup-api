@@ -12,6 +12,7 @@ import { MeetupAlreadyExistsException } from './exception/meetup-already-exists.
 import { GuestAlreadyRegisteredException } from './exception/guest-already-registered.exception';
 import { GuestNotRegisteredException } from './exception/guest-not-registered.exception';
 import { UserNotExistException } from '../module/auth/module/user/service/exception/user-not-exist.exception';
+import { UpdateMeetupOptions } from './options/update-meetup.options';
 
 @Injectable()
 export class MeetupService implements IMeetupService {
@@ -46,7 +47,7 @@ export class MeetupService implements IMeetupService {
     return meetup;
   }
 
-  public async editMeetup(id: number, options: any): Promise<Meetup> {
+  public async editMeetup(id: number, options: UpdateMeetupOptions): Promise<Meetup> {
     const meetup = await this.findById(id);
     if (!meetup) throw new MeetupNotExistException();
 
