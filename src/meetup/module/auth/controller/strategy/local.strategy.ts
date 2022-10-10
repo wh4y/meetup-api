@@ -26,8 +26,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, LOCAL_STRATEGY) {
     await validateDto(dto).then((errors) => {
       let messages = [];
       errors.forEach(error => messages.push(...Object.values(error.constraints)));
-
-      throw new BadRequestException(messages);
+      if (messages.length) throw new BadRequestException(messages);
     });
 
     return await this.authService.signIn(dto);
