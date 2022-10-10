@@ -23,6 +23,10 @@ export class MeetupService implements IMeetupService {
   ) {
   }
 
+  private async hasTitleAlreadyTaken(title: string): Promise<boolean> {
+    return Boolean(await this.meetupRepo.countBy({ title }));
+  }
+
   public async registerMeetup(options: CreateMeetupOptions): Promise<Meetup> {
     const meetup = await this.meetupRepo.findOne({
       where: {
