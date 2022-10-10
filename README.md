@@ -7,7 +7,7 @@
 
 ## Steps:
 
-* Change env vars for db connection in .env file
+* Change env vars for db connection in .env file [ OPTIONAL ]
 * Run 'docker-compose up' command or 'docker-compose up --build' in project root dir
 
 # Docs
