@@ -8,7 +8,7 @@ import { FindMeetupOptions } from './options/find-meetup.options';
 import { ArrayContains, FindOptionsWhere } from 'typeorm';
 import { UserService } from '../module/auth/module/user/service/user.service';
 import { MeetupNotExistException } from './exception/meetup-not-exist.exception';
-import { MeetupAlreadyExistsException } from './exception/meetup-already-exists.exception';
+import { TitleAlreadyTakenException } from './exception/title-already-taken.exception';
 import { GuestAlreadyRegisteredException } from './exception/guest-already-registered.exception';
 import { GuestNotRegisteredException } from './exception/guest-not-registered.exception';
 import { UserNotExistException } from '../module/auth/module/user/service/exception/user-not-exist.exception';
@@ -29,7 +29,7 @@ export class MeetupService implements IMeetupService {
 
   public async registerMeetup(options: CreateMeetupOptions): Promise<Meetup> {
     if (await this.hasTitleAlreadyTaken(options.title))
-      throw new MeetupAlreadyExistsException();
+      throw new TitleAlreadyTakenException();
 
     return await this.meetupRepo.save(Meetup.create(options));
   }
@@ -46,6 +46,9 @@ export class MeetupService implements IMeetupService {
   public async editMeetup(id: number, options: UpdateMeetupOptions): Promise<Meetup> {
     const meetup = await this.findById(id);
     if (!meetup) throw new MeetupNotExistException();
+
+    if (await this.hasTitleAlreadyTaken(options.title))
+      throw new TitleAlreadyTakenException();
 
     await this.meetupRepo.update({ id }, options);
 
