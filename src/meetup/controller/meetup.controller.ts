@@ -48,6 +48,8 @@ import { UserService } from '../module/auth/module/user/service/user.service';
 import { UnregisterGuestDto } from './dto/unregister-guest.dto';
 import { ACCESS_TOKEN } from '../module/auth/controller/cookie/access-token.cookie';
 import { AccessJwtAuthGuard } from '../module/auth/controller/guard/access-jwt-auth.guard';
+import { AuthedUser } from '../module/auth/controller/decorator/authed-user.decorator';
+import { User } from '../module/auth/module/user/entity/user.entity';
 
 
 @ApiTags('Meetup')
@@ -101,9 +103,8 @@ export class MeetupController implements IMeetupController {
   @Post('/register')
   async register(
     @Body() dto: RegisterMeetupDto,
-    @ExtractedUserId() organizerId: number,
+    @AuthedUser() organizer: User,
   ): Promise<Meetup> {
-    const organizer = await this.userService.findById(organizerId);
     const meetup = await this.meetupService.registerMeetup({ ...dto, organizers: [organizer] });
 
     return meetup;
@@ -179,7 +180,7 @@ export class MeetupController implements IMeetupController {
   @ApiNoContentResponse({
     description: 'User has been successfully unregistered for a meetup!',
   })
-  @ApiBody({type: UnregisterGuestDto})
+  @ApiBody({ type: UnregisterGuestDto })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/unregister-guest-for-meetup/:meetupId')
   @UseGuards(AccessJwtAuthGuard)
