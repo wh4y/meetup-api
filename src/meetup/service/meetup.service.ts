@@ -28,16 +28,8 @@ export class MeetupService implements IMeetupService {
   }
 
   public async registerMeetup(options: CreateMeetupOptions): Promise<Meetup> {
-    const meetup = await this.meetupRepo.findOne({
-      where: {
-        title: options.title,
-      },
-      relations: {
-        guests: true,
-        organizers: true,
-      },
-    });
-    if (meetup) throw new MeetupAlreadyExistsException();
+    if (await this.hasTitleAlreadyTaken(options.title))
+      throw new MeetupAlreadyExistsException();
 
     return await this.meetupRepo.save(Meetup.create(options));
   }
