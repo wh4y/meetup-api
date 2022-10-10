@@ -30,7 +30,7 @@ import { MeetupMapper } from './mapper/meetup/meetup.mapper';
 import { Meetup } from '../entity/meetup/meetup.entity';
 import { ExtractedUserId } from './decorator/extracted-user-id.decorator';
 import { MeetupNotExistInterceptor } from './interceptor/meetup-not-exist.interceptor';
-import { MeetupAlreadyExistsInterceptor } from './interceptor/meetup-already-exists.interceptor';
+import { TitleAlreadyTakenInterceptor } from './interceptor/title-already-taken.interceptor';
 import { GuestAlreadyRegisteredInterceptor } from './interceptor/guest-already-registered.interceptor';
 import { GuestNotRegisteredInterceptor } from './interceptor/guest-not-registered.interceptor';
 import { UserNotExistInterceptor } from '../module/auth/module/user/controller/interceptor/user-not-exist.interceptor';
@@ -54,7 +54,7 @@ import { AccessJwtAuthGuard } from '../module/auth/controller/guard/access-jwt-a
 @UseInterceptors(
   ClassSerializerInterceptor,
   MeetupNotExistInterceptor,
-  MeetupAlreadyExistsInterceptor,
+  TitleAlreadyTakenInterceptor,
   GuestNotRegisteredInterceptor,
   UserNotExistInterceptor,
   GuestAlreadyRegisteredInterceptor,
